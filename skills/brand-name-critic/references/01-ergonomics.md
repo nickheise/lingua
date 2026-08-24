@@ -244,10 +244,18 @@ only thing weighted up, a low score here is the closest that profile comes to a 
 
 **Means:** survival inside ordinary sentences — "just Slack me", "I Googled it", "Scout it first".
 
+> **`verb_form` is always non-null — do not read it as evidence of anything.** The script builds
+> it mechanically from the name, so an invented word gets `"to kestrel"` and an agentive of
+> `"kestreler"` exactly as readily as *Scout* gets `"to scout"`. The signal that separates them is
+> the **evidence string** on `dimensions.verbability`: a name already in the lexicon carries
+> `"already an English word — inflects without explanation (+5)"`, and a coined one does not.
+> Key on that. Reading a populated `verb_form` as "this is already a verb" produces a confident
+> overclaim about usage that does not exist — this happened in a real validation run.
+
 | Signal | Reading |
 |---|---|
-| `verb_form` non-null and already English | Free verb. Strong asset under **venture**. |
-| `verb_form` null but 1–2 syllables ending in a consonant | Verbable in principle; it will happen naturally if the product is used enough. |
+| evidence includes `already an English word` | Free verb, no education cost. Strong asset under **venture**. |
+| evidence lacks it, but 1–2 syllables ending in a consonant | **Verbable in principle, not yet verbed.** It will happen naturally if the product is used enough — a smaller asset than an existing verb, and it must be described as potential rather than fact. |
 | 3+ syllables and no clipping | Will not be verbed. Under venture, a real if quiet loss. |
 | `clippable_to` non-empty | Users will do this whether you approve or not. Check the clipping is not itself a problem — an unfortunate word, or another product. |
 

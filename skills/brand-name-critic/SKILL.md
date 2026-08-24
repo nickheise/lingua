@@ -12,11 +12,10 @@ Three layers, three shapes of verdict: a measurement, an argument, a fact sheet.
 Output shape: `assets/critique-template.md`. Worked targets:
 `docs/reference-critiques/`.
 
-> **Resolving `${CLAUDE_PLUGIN_ROOT}`.** When this plugin is installed, the variable is
-> substituted for you. When it is not — a bare checkout, a subagent, a sandbox — it is empty, and
-> a literal expansion produces a broken path. In that case resolve it to the plugin root: the
-> directory containing `skills/` and `shared/`, two levels above this skill's own directory.
-> Never silently skip a file because the path did not expand.
+> **Paths.** `${CLAUDE_PLUGIN_ROOT}` and `${CLAUDE_SKILL_DIR}` are substituted only when the plugin
+> is installed. If either comes back empty — a bare checkout, a subagent, a sandbox — resolve it
+> yourself: the plugin root holds `skills/` and `shared/`; the skill dir is this file's own folder.
+> Never skip a file, or a script, because its path did not expand.
 
 ## Step 1 — Establish the profile
 
@@ -63,9 +62,15 @@ knockout collision, domain/handle, SEO, cross-cultural screen. Screen against
 Close with an **argued recommendation and what would change it**. Never a verdict — the user
 decides. `flag, never block`: nothing here has a veto.
 
-## Close out (every run)
+## Close out
 
 - **Edit** `references/troubleshooting.md` — revise existing entries rather than appending
   indefinitely.
 - Append the name, profile, and outcome to
   `${CLAUDE_PLUGIN_ROOT}/shared/naming-decisions-log.md`.
+
+**Read-only runs skip both, and say so in one line.** A blind QA pass spawned by
+`brand-name-generator`, an evaluation harness, or any run without write access should not fail
+here and must not pretend to have logged. Write `Close-out skipped — read-only run.` and stop.
+The logs are how this skill improves over fifty runs, so an interactive run skipping them is a
+defect; a read-only run skipping them is correct.

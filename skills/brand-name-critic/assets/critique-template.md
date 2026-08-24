@@ -62,9 +62,6 @@ change if it were wrong.>
 
 ## Layer 1 — Ergonomics (computed)
 
-<!-- PROVISIONAL: reconcile against real phonetics.py output -->
-<!-- Delete the line above once the numbers come from an actual run. -->
-
 `python3 ${CLAUDE_SKILL_DIR}/scripts/phonetics.py "<Name>"`
 
 **Pronunciation:** `<ARPABET>` · /<IPA>/ · source `<cmudict|cmudict-compound|g2p>`,

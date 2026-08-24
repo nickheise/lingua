@@ -79,6 +79,16 @@ the correct price of it, not a failure.
 
 ### 2 · Knockout collision check — heuristic
 
+> **Live search: no, for every check in this layer — including this one.** The no-live-lookups
+> non-goal is usually stated for domains, which leaves the knockout check looking like it might be
+> an exception. It is not. Run it from your own knowledge, say plainly that it is from memory and
+> not a search, and order the collisions by risk. Never write "no conflicts found" — you did not
+> look. If a web search tool happens to be available, using it here would make this table more
+> defensible but would also make the critique's cost and latency unpredictable and its output
+> non-reproducible, which is why v1 stays offline. Recommending a real search is the correct
+> output; performing one is not this layer's job.
+
+
 A knockout search is the cheap first pass a professional runs before paying for a full search: are
 there obvious, identical or near-identical marks in the same or adjacent classes? **Ours is
 heuristic and model-based** — no register is being queried — so it finds the obvious and misses

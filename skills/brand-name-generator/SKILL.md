@@ -13,11 +13,10 @@ world into a clustered shortlist ready for critique. It does not build worlds.
 — don't improvise a world here. Take the world's name, its vocabulary, and its
 `breadth × fidelity` evidence as given input.
 
-> **Resolving `${CLAUDE_PLUGIN_ROOT}`.** When this plugin is installed, the variable is
-> substituted for you. When it is not — a bare checkout, a subagent, a sandbox — it is empty, and
-> a literal expansion produces a broken path. In that case resolve it to the plugin root: the
-> directory containing `skills/` and `shared/`, two levels above this skill's own directory.
-> Never silently skip a file because the path did not expand.
+> **Paths.** `${CLAUDE_PLUGIN_ROOT}` and `${CLAUDE_SKILL_DIR}` are substituted only when the plugin
+> is installed. If either comes back empty — a bare checkout, a subagent, a sandbox — resolve it
+> yourself: the plugin root holds `skills/` and `shared/`; the skill dir is this file's own folder.
+> Never skip a file, or a script, because its path did not expand.
 
 ## Step 1 — Diverge
 
@@ -60,19 +59,15 @@ Spawn a **fresh-context subagent** (the Agent/Task tool, `general-purpose` type)
 - an instruction to run the `brand-name-critic` skill independently on each name and return its
   full critique
 
-**Withhold everything else:** the world and its name, the operator that produced each candidate,
-its cluster, its rationale, its own siblings, its own usage sentence. The subagent derives all of
-that itself. Withholding it is the point, not an oversight — a critic that knew the world could
-judge fidelity better, but that would break the fresh-context property this step exists to buy.
-This is the maker/critic split enforced structurally, not just conceptually, and it's the strongest
-argument for keeping the two skills separate. (PRD open question 5 leans the same way, deliberately.)
+**Withhold everything else** — the world, the operator, the cluster, the rationale, the siblings,
+the usage sentence. The subagent derives all of it. Withholding is the point: a critic that knew
+the world would judge fidelity better and destroy the fresh-context property this step exists to
+buy. See [`references/02-converge.md`](references/02-converge.md) for the full argument.
 
-Attach each returned critique's headline and full text under that candidate's block in the
-filled shortlist. Present the shortlist with critiques attached — the cross-candidate
-recommendation is the user's call, not this skill's.
+Attach each critique under its candidate's block. The cross-candidate call is the user's.
 
-## Close out (every run)
+## Close out
 
-Edit `references/troubleshooting.md` — revise existing entries rather than appending
-indefinitely. Append the world, the candidates, and the outcome to
-`${CLAUDE_PLUGIN_ROOT}/shared/naming-decisions-log.md`.
+Edit `references/troubleshooting.md` — revise entries, do not append indefinitely. Append the
+world, the candidates, and the outcome to `${CLAUDE_PLUGIN_ROOT}/shared/naming-decisions-log.md`.
+**On a read-only run, skip both and say `Close-out skipped — read-only run.`**

@@ -13,11 +13,10 @@ that vocabulary from, and proving it holds up before anyone gets attached to a w
 **This skill terminates at a chosen world. It does not produce names.** That boundary is not a
 formality — see the guard in Step 4.
 
-> **Resolving `${CLAUDE_PLUGIN_ROOT}`.** When this plugin is installed, the variable is
-> substituted for you. When it is not — a bare checkout, a subagent, a sandbox — it is empty, and
-> a literal expansion produces a broken path. In that case resolve it to the plugin root: the
-> directory containing `skills/` and `shared/`, two levels above this skill's own directory.
-> Never silently skip a file because the path did not expand.
+> **Paths.** `${CLAUDE_PLUGIN_ROOT}` and `${CLAUDE_SKILL_DIR}` are substituted only when the plugin
+> is installed. If either comes back empty — a bare checkout, a subagent, a sandbox — resolve it
+> yourself: the plugin root holds `skills/` and `shared/`; the skill dir is this file's own folder.
+> Never skip a file, or a script, because its path did not expand.
 
 ## Step 1 — Load the brief
 
@@ -62,3 +61,5 @@ later, deliberately.
 
 Edit `references/troubleshooting.md` — revise existing entries rather than appending
 indefinitely.
+
+**On a read-only run, skip the close-out and say `Close-out skipped — read-only run.`**
