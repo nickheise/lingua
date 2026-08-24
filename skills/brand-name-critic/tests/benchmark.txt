@@ -1,0 +1,74 @@
+# The 20-name benchmark for phonetics.py (PRD §8, BUILD-MAP §4 Phase 1).
+#
+# Format: one name per line; '#' starts a comment. Run with
+#     python3 ../scripts/phonetics.py --file benchmark.txt --pretty
+#
+# Every name is here to probe something specific. If a change to the script
+# moves one of these in a direction the comment does not predict, the change is
+# wrong or the comment is out of date — either way, look.
+
+# --- the good ones: names that should score comfortably ---------------------
+
+Scout        # PRD's model name. In CMUdict. /sk/ onset MUST NOT trip the
+             # sonority check. Dense namespace, so distinctiveness should be
+             # mediocre while everything else is high — "world, not word" is
+             # the brandability layer's problem, not this script's.
+Stripe       # /str/ three-consonant onset, also /s/-appendix licensed.
+             # Monosyllable, magic-e spelling, unambiguous.
+Notion       # <ti> = /ʃ/. Probes the ambiguous-grapheme table and two-syllable
+             # trochaic rhythm.
+Slack        # Existing English word, monosyllable, rare letter <k> on /k/.
+             # Very dense neighbourhood — distinctiveness should be low.
+Figma        # Coined, NOT in CMUdict: exercises the g2p fallback on a name
+             # that is nonetheless completely well-formed. Clips to "fig".
+Lingua       # The module's own name. PRD §7.2 says: two syllables, DA-da,
+             # clean, unambiguous spelling. If this does not come out
+             # comfortable, the scoring is wrong. /gw/ onset — needs the
+             # legal-onset set to include it.
+Base Camp    # Multi-word input. Two tokens looked up separately, phonemes
+             # concatenated, syllables never straddling the space.
+
+# --- rare letters, common sounds (PRD §3.3) ---------------------------------
+
+Xerox        # The canonical case. <x> -> /z/. rare_letter_common_sound MUST
+             # be true. Sparse neighbourhood, high distinctiveness.
+Kodak        # Barton's other example. <k> on /k/, coined, trochaic.
+Zillow       # Coined, not in CMUdict. <z> on /z/. Must be true.
+             # Deliberately also checks that compound decomposition does NOT
+             # fire here ("zill" + "low" would be nonsense).
+
+# --- real names with a real ergonomic cost ----------------------------------
+
+Flickr       # The dropped vowel. Probes coda sonority and spellability:
+             # "flickr" vs "flicker" is the whole point of the name.
+Palantir     # Three syllables, /r/ and /l/ together (Japanese/Korean
+             # contrast), "read the ending" case for the brandability layer.
+             # International risk should not be low.
+
+# --- deliberately bad: each fails differently --------------------------------
+
+Xzrq         # The reference disaster (docs/reference-critiques/bad-xzrq.md).
+             # No vowel nucleus, illegal onset, rare letters on a rare/illegal
+             # sound. rare_letter_common_sound MUST be false. Should be the
+             # worst or near-worst score, and for those stated reasons — not
+             # for distinctiveness, which is genuinely high.
+Vzzt         # No vowel either, but short and with a legal-ish shape. Tests
+             # that "no vowel" collapses rhythm and verbability.
+Sqwrlyx      # Has a vowel, but buried under /skwrl/. Illegal onset, rare
+             # letters, ambiguous <y> and <x>.
+Blorbnth     # Legal onset /bl/, then a four-consonant coda /rbnθ/ that rises
+             # in sonority. Probes the coda rules specifically, and /θ/ for
+             # international risk.
+
+# --- plausible but flawed: the interesting middle ----------------------------
+
+Synerteq     # Looks like a real B2B name. Coined, /k/ spelled <q> with no
+             # <u>, three syllables. Should score mid, not badly.
+Thrixthwaite # /θr/ and /θw/ onsets — both legal, so this must NOT be flagged
+             # as illegal. It fails on spellability and international risk
+             # instead, which is the honest reading.
+Cat          # Control. Maximally dense neighbourhood; distinctiveness should
+             # be near the bottom of the set while everything else is high.
+             # Paired against Xzrq/Blorbnth in the density test.
+Firefox      # Compound decomposition control (fire + fox). In CMUdict as a
+             # whole word, so it should resolve as "cmudict", not compound.

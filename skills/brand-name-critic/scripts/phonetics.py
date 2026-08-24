@@ -779,6 +779,8 @@ def stress_profile(sylls: List[Syllable]) -> Dict[str, object]:
     else:
         primary = 0
     n = len(sylls)
+    if n == 0:
+        return {"pattern": "", "primary_syllable": 0, "shape": "no syllables"}
     if n == 1:
         shape = "monosyllable" if sylls[0].nucleus else "no vowel nucleus"
     else:
@@ -1257,7 +1259,18 @@ def international_profile(phones: Sequence[str], sylls: List[Syllable]) -> Dict[
         languages.update(INITIAL_NG_LANGUAGES)
         weight += 2
 
-    risk = "low" if weight == 0 else ("medium" if weight <= 2 else "high")
+    # Structural difficulty counts too: a consonant cluster of three or more,
+    # and above all a name with no vowel nucleus, are hard everywhere and
+    # especially in CV-syllable languages (Japanese, Mandarin, Korean).
+    structural = 0
+    if any(len(s_.onset) >= 3 or len(s_.coda) >= 3 for s_ in sylls):
+        structural += 1
+        languages.update(["Japanese", "Mandarin", "Korean"])
+    if sylls and not any(s_.nucleus for s_ in sylls):
+        structural += 2
+        languages.update(["Japanese", "Mandarin", "Korean"])
+    total = weight + structural
+    risk = "low" if total == 0 else ("medium" if total <= 2 else "high")
     return {
         "hard_phonemes": hard,
         "affected_languages": sorted(languages),
@@ -1358,6 +1371,14 @@ def _consonant_runs(letters: str) -> List[str]:
     return runs
 
 
+def _ordinal(n: int) -> str:
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return "{0}{1}".format(n, suffix)
+
+
 def _clamp(x: float) -> int:
     return int(max(0, min(100, round(x))))
 
@@ -1453,8 +1474,8 @@ def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
     density = int(ctx["density"])                            # type: ignore[arg-type]
     rare = list(ctx["rare_letters"])                         # type: ignore[arg-type]
     score = 100.0 - 0.6 * percentile
-    ev = ["neighbourhood density {0} ({1}th percentile of the lexicon)".format(
-        density, percentile)]
+    ev = ["neighbourhood density {0} ({1} percentile of the lexicon)".format(
+        density, _ordinal(percentile))]
     if rlcs is True:
         score += 12
         ev.append("rare letters, common sounds: <{0}> on common English phonemes (+12)".format(
