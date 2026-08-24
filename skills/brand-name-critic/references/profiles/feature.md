@@ -11,9 +11,10 @@ rule for this context.
 menu item, a settings label, a command, a button, a feature the user encounters *after* they
 already opened the app.
 
-If the user hasn't said which context they're in, **ask, briefly** — and specifically ask for
-the names of the sibling features it will sit next to. This profile cannot be applied correctly
-without that list; do not guess it, and do not proceed on assumed siblings.
+This profile has one more question `SKILL.md` Step 1 doesn't already ask: **name the sibling
+features it will sit next to.** Ask directly, not apologetically — this profile cannot be applied
+correctly without that list, so it isn't optional politeness, it's the input the sibling-
+consistency check runs on. Do not guess it, and do not proceed on assumed siblings.
 
 **Feature naming and product naming are opposite problems.** A candidate that scores well under
 [`venture.md`](venture.md) may correctly fail here — that is not a contradiction, it is the point

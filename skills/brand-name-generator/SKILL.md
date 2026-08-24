@@ -6,17 +6,20 @@ disable-model-invocation: true
 
 # Brand name generator
 
-`diverge → cluster → converge`. `world, not word`. This skill turns one already-chosen semantic
-world into a clustered shortlist ready for critique. It does not build worlds.
+`diverge → cluster → converge`. `world, not word`. Turns one chosen semantic world into a
+clustered shortlist ready for critique; it does not build worlds. Terminates at **names**
+(`names or a verdict`; `${CLAUDE_PLUGIN_ROOT}/shared/velocity.md` is binding).
 
-**Requires a chosen world.** If `/lingua:brand-name-worlds` hasn't been run yet, say so and stop
-— don't improvise a world here. Take the world's name, its vocabulary, and its
-`breadth × fidelity` evidence as given input.
+Open every response `Step N of M · toward a critiqued shortlist of ~12 candidates` — this skill's
+deliverable, not the chain's.
 
-> **Paths.** `${CLAUDE_PLUGIN_ROOT}` and `${CLAUDE_SKILL_DIR}` are substituted only when the plugin
-> is installed. If either comes back empty — a bare checkout, a subagent, a sandbox — resolve it
-> yourself: the plugin root holds `skills/` and `shared/`; the skill dir is this file's own folder.
-> Never skip a file, or a script, because its path did not expand.
+**Requires a chosen world.** Arrive without one → say this and stop, don't improvise one:
+`Next: /lingua:brand-name-worlds` — produces 2–3 stress-tested worlds; needs your brief or
+concept.
+
+> **Paths.** If `${CLAUDE_PLUGIN_ROOT}`/`${CLAUDE_SKILL_DIR}` are empty (bare checkout, subagent,
+> sandbox), resolve yourself: plugin root holds `skills/`+`shared/`, skill dir is this file's
+> folder. Never skip a file over an unexpanded path.
 
 ## Step 1 — Diverge
 
@@ -29,8 +32,8 @@ operator, not free-association until tired.
 ## Step 2 — Cluster
 
 Group the divergent list into 3–4 approaches *within* the world: direct, oblique,
-coined-from-root, compound. A cluster with zero or one entry means Step 1 under-covered that
-approach — go back rather than force a candidate into it.
+coined-from-root, compound. An empty or single-entry cluster means Step 1 under-covered that
+approach — go back rather than force a fit.
 
 ## Step 3 — Converge
 
@@ -48,26 +51,24 @@ reason names fail in usage, not in lists — write a realistic sentence, not a t
 ## Step 4 — Blind subagent QA (mandatory, every run)
 
 The generator does not grade its own output — an agent evaluating work it just produced sees
-fewer flaws in it, because it still holds the reasons for each choice. So before the shortlist is
-presented, it gets an independent read.
+fewer flaws in it, because it still holds the reasons for each choice.
 
-Spawn a **fresh-context subagent** (the Agent/Task tool, `general-purpose` type) whose entire prompt is:
+Spawn a **fresh-context subagent** (Agent/Task tool, `general-purpose` type). Prompt: the
+candidate names **alphabetized** — never generation order, never a favorite flagged — the context
+profile, and an instruction to run `brand-name-critic` on each and return its critique.
 
-- the surfaced candidate names, **alphabetized** — never in generation order, never annotated
-  with a favorite
-- the context profile (venture / feature / codename)
-- an instruction to run the `brand-name-critic` skill independently on each name and return its
-  full critique
+**Withhold everything else** — world, operator, cluster, rationale, siblings, usage sentence. A
+critic that knew the world would judge fidelity better and destroy the fresh-context property this
+step buys. Full argument: [`references/02-converge.md`](references/02-converge.md).
 
-**Withhold everything else** — the world, the operator, the cluster, the rationale, the siblings,
-the usage sentence. The subagent derives all of it. Withholding is the point: a critic that knew
-the world would judge fidelity better and destroy the fresh-context property this step exists to
-buy. See [`references/02-converge.md`](references/02-converge.md) for the full argument.
-
-Attach each critique under its candidate's block. The cross-candidate call is the user's.
+Attach each critique under its candidate's block.
 
 ## Close out
 
-Edit `references/troubleshooting.md` — revise entries, do not append indefinitely. Append the
+Terminal artifact — names, each already critiqued. Say so; the cross-candidate call is the
+user's. A candidate reading weak against its critique gets another generator pass, not a manual
+patch here.
+
+Edit `references/troubleshooting.md` — revise entries, don't append indefinitely. Append the
 world, the candidates, and the outcome to `${CLAUDE_PLUGIN_ROOT}/shared/naming-decisions-log.md`.
 **On a read-only run, skip both and say `Close-out skipped — read-only run.`**

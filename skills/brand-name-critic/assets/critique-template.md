@@ -108,10 +108,17 @@ would be false precision.>
 |---|---|---|
 | … | … | … |
 
+<Name the breadth finding in the user's own terms alongside the rubric's: six or more siblings
+arriving quickly reads as **scalable**; three or fewer, or siblings that had to be invented, reads
+as **finite**. One clause, not a new criterion.>
+
 **Fidelity.** <For each sibling: was the mapping already true, or did it need justifying?>
 
 **Find the breaking point.** <Error state · permissions · empty state · billing. Say which surface
-breaks and whether it is a seam (peripheral) or a hole (core).>
+breaks and whether it is a seam (peripheral) or a hole (core). Also say it in the user's terms: a
+metaphor that breaks only on a peripheral surface like billing is **flexible**; one that breaks on
+the core object or primary action is **fixed**. Same finding, one clause added, not a rename of
+the rubric's seam/hole distinction.>
 
 **Keep the metaphor off the buttons.** <Which terms are concepts and which would be UI labels.>
 
@@ -199,3 +206,81 @@ search, a different positioning, a change of profile. Be concrete enough to be a
 6. **Ends in an argued recommendation with a "what would change this read."** Never a verdict.
 7. **Length follows the case.** A clean name is short. A name whose layers disagree earns the
    space. Never pad a section to fill the shape — an empty finding is written as one line.
+
+---
+
+## Comparison variant — head-to-head
+
+Procedure and rules: `references/04-comparison.md`. This is the output shape only.
+
+**Headline — a pick, never a ranking:**
+
+```
+Comparison: <Name A> vs <Name B> [vs <Name C>...] — <profile>
+Decisive dimension(s): <the 1-2 that separate them under this profile, with the numbers>
+Recommendation: <Name> — <the one-line reason>
+```
+
+**Skeleton:**
+
+````markdown
+# <Name A> vs <Name B> [vs …]
+
+**Profile:** <…> · **Candidate for:** <…>
+
+**Decisive dimension(s) under this profile:** <name them; this is the lead, not the table>
+
+---
+
+## Ergonomics — side by side
+
+`python3 ${CLAUDE_SKILL_DIR}/scripts/phonetics.py "<Name A>" "<Name B>"` — one call, one array.
+
+| Dimension | <Name A> | <Name B> | … |
+|---|---:|---:|---|
+| Pronounceability | | | |
+| Spellability | | | |
+| Distinctiveness | | | |
+| Rhythm & recall | | | |
+| Verbability | | | |
+| International robustness | | | |
+| **`ergonomics_score`** | | | |
+
+<Prose only on rows that actually differ — mark the rest "equivalent" and move on. No new row, no
+summary column, no average.>
+
+---
+
+## Brandability — separate bets, not a table
+
+### <Name A>
+
+<Full Layer 2 read: five criteria, position + counter-argument each, exactly as a solo critique.
+Close with one line naming the bet this candidate is.>
+
+### <Name B>
+
+<Same, independently. Close with one line naming *its* bet.>
+
+---
+
+## Practicality — flags, juxtaposed
+
+| Candidate | Headline flags (`high`) | Note |
+|---|---:|---|
+| <Name A> | <n> | <only if it differs from Name B's story> |
+| <Name B> | <n> | |
+
+---
+
+## Recommendation
+
+**Pick:** <Name> — <one line>.
+
+**Strongest case for the other:** <the one argument, not a list>.
+
+**What would flip it:** <the specific fact or answer that reverses this>.
+
+<If genuinely tied on the decisive dimensions: say so, and name the tie-breaker — usually
+ownability or an existing sibling system — instead of manufacturing a preference.>
+````

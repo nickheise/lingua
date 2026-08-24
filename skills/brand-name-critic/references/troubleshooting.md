@@ -72,11 +72,42 @@ picks a profile based on conversational context instead of asking.
 **Cause (anticipated):** critics are model-invoked and fire fast by design (PRD §5.1) — the same
 speed that makes critique cheap and welcome also creates pressure to skip a clarifying question
 and just proceed.
-**Fix (anticipated):** every profile file already states "ask, briefly" as step 1 — the risk is
-that instruction getting skipped under time pressure rather than the instruction being missing.
-Watch specifically for this on the first several real runs; if it recurs, the fix is a stronger,
-more visible flag in `SKILL.md` itself rather than in a profile file the skill may not have loaded
-yet at the point the question should be asked.
+**Fix (anticipated):** `SKILL.md` Step 1 now asks the profile question directly and upfront,
+batched with the sound-symbolism positioning question, before any profile file loads — the ask no
+longer lives only inside a file the skill might not have reached yet. Watch specifically for this
+on the first several real runs; if it still recurs, the profile-file fallback text
+(`references/profiles/*.md` §1) is the next thing to tighten, not the SKILL.md line itself.
+**Status:** anticipated.
+
+### 2026-08-24 — comparison mode collapses into a ranking
+**Symptom (anticipated):** the head-to-head output ends with something that functions as a
+ranking in disguise — two per-layer numbers set side by side with a "wins on X, loses on Y"
+tally, an implied ordering across the ergonomics table rows, or a recommendation phrased as
+"Name A edges out Name B" rather than a pick, the strongest case for the other, and what would
+flip it.
+**Cause (anticipated):** a side-by-side table is the most natural shape for a spreadsheet-style
+mind to reach for, and once ergonomics numbers are sitting in adjacent columns the pull toward
+summing or comparing them into one ordering is strong — exactly the composite the three-layer
+split exists to prevent, just relocated into a table instead of a single critique.
+**Fix (anticipated, to verify on first real comparison run):** `references/04-comparison.md` §7
+already states the rule in the strongest terms available ("if a sentence could be replaced by two
+numbers and a greater-than sign, rewrite it"). If this recurs, add a concrete before/after example
+of the disallowed phrasing to §7 rather than restating the rule more emphatically.
+**Status:** anticipated.
+
+### 2026-08-24 — the step ledger states the chain's goal instead of this skill's
+**Symptom (anticipated):** the opening `Step N of M · toward …` line names "a shortlist of
+candidates" or some other downstream artifact instead of *this run's own* deliverable, "an argued
+recommendation" — usually because the critic was invoked mid-chain (a blind QA pass from
+`brand-name-generator`, or a user who mentions the eventual shortlist while floating one name) and
+the visible goal in context is the chain's, not this skill's.
+**Cause (anticipated):** `shared/velocity.md` §2 names this exact failure as goal leakage — an
+agent that can see the chain's finish line while doing its own leg rushes the leg to get there.
+The critic is especially exposed because it is so often invoked *from inside* another skill's run.
+**Fix (anticipated):** SKILL.md's ledger line is already fixed text — "toward an argued
+recommendation" — precisely so there's nothing to compose per-run and therefore nothing to drift.
+If this recurs, the fix is checking that the ledger line was copied verbatim rather than
+paraphrased from surrounding context, not rewording it.
 **Status:** anticipated.
 
 ### 2026-08-24 — a name whose lore has no ending to read

@@ -10,11 +10,12 @@ special rule for this context.
 **Trigger test:** the name will sit on a cap table, a domain, a logo, or a homepage — it names
 the *thing itself*, not a control inside it.
 
-If the user hasn't said which context they're in, **ask, briefly** — "Is this the product/venture
-name, a feature inside an existing product, or an internal codename?" — before picking a profile.
-Do not guess silently. Venture is the highest-consequence misapplication of the three (see
-[`feature.md`](feature.md) for why applying this profile to a feature name is the Copilot failure
-mode in reverse).
+`SKILL.md` Step 1 asks this directly, batched with the positioning question, before any profile
+file loads — this file should already have an answer by the time it's read. Loaded some other
+way with the question still open: ask it directly, now, in one line — "Venture/product,
+feature/UI, or internal codename?" — do not guess silently. Venture is the highest-consequence
+misapplication of the three (see [`feature.md`](feature.md) for why applying this profile to a
+feature name is the Copilot failure mode in reverse).
 
 ## 2. Weights
 

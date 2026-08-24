@@ -2,6 +2,13 @@
 
 **Every skill in this suite is a means. The run is over when there are names, or a verdict.**
 
+> **One word, two senses — worth separating once, here.** "A verdict" in this file means the
+> *completed three-layer readout*: ergonomics, brandability, practicality, and an argued
+> recommendation. It is never "the verdict" in the sense the critic itself explicitly refuses to
+> give — a final, unappealable yes/no. Reaching a verdict-artifact and delivering an absolute
+> verdict-judgment are different things; this suite always does the first and never the second.
+> `flag, never block` is what keeps them separate in practice.
+
 World-building, briefs, operator sweeps, and rubric layers are all necessary work — and none of
 them is a destination. A run that ends with a thoughtful document and no next move has failed,
 however good the document is. This file is the contract every skill honours so that does not

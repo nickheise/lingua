@@ -97,3 +97,18 @@ because an omission-framed instruction is what a rushed run skips first. If this
 fix is a literal template string in Step 4 to copy rather than compose freely, so there's no
 authoring step where a leak could get introduced.
 **Status:** anticipated.
+
+### 2026-08-24 — the step ledger states the chain's goal instead of this skill's
+**Symptom (anticipated):** the opening `Step N of M · toward …` line names "names," "a verdict,"
+or some other downstream/upstream artifact instead of *this run's own* deliverable, "a critiqued
+shortlist of ~12 candidates" — plausible here because this skill's whole job is to hand off to a
+critic and receive critiques back, so both neighboring artifacts are constantly in view.
+**Cause (anticipated):** `shared/velocity.md` §2 names this exact failure as goal leakage — an
+agent that can see the chain's finish line while doing its own leg rushes the leg to get there.
+`brand-name-generator` sits in the middle of the three-skill chain, the position most exposed to
+it, with a named upstream deliverable (worlds) and downstream one (critiques) on either side.
+**Fix (anticipated):** `SKILL.md`'s ledger line is already fixed text — "toward a critiqued
+shortlist of ~12 candidates" — so there is nothing to compose per-run. If this recurs, check the
+line was copied verbatim rather than paraphrased from whichever neighboring artifact is more
+salient in the moment, not reworded.
+**Status:** anticipated.

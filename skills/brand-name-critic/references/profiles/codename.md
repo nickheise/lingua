@@ -10,12 +10,11 @@ rule for this context.
 **Trigger test:** the name is for internal use only — a project, repo, branch, or ticket
 identifier — and is not intended to appear on any customer-facing surface.
 
-If the user hasn't said which context they're in, **ask, briefly** — and specifically ask
-*"will this ever ship, or could it?"* This is not a rhetorical question: "internal for now" is
-not the same claim as "will never leak," and the answer changes whether this profile is even the
-right one to load. If there is real uncertainty about whether it ships, treat it as
-[`venture.md`](venture.md) or [`feature.md`](feature.md) instead — this profile assumes disposal
-by design.
+This profile has one more question `SKILL.md` Step 1 doesn't already ask: **"will this ever ship,
+or could it?"** Ask it directly — it decides whether this profile is even the right one to load,
+not a courtesy question. "Internal for now" is not the same claim as "will never leak." If there
+is real uncertainty about shipping, treat it as [`venture.md`](venture.md) or
+[`feature.md`](feature.md) instead — this profile assumes disposal by design.
 
 ## 2. Weights
 
