@@ -25,8 +25,6 @@ ends of two dimensions the venture profile cares about most.
 
 ## Layer 1 — Ergonomics (computed)
 
-<!-- PROVISIONAL: reconcile against real phonetics.py output -->
-
 `python3 scripts/phonetics.py "Scout"`
 
 **Pronunciation:** `S K AW1 T` · /skaʊt/ · source `cmudict`, confidence **high**.
@@ -35,12 +33,12 @@ lookup, not an estimate.
 
 | Dimension | Score | Evidence |
 |---|---:|---|
-| Pronounceability | 96 | 1 syllable; legal onset /sk/; no sonority violation |
-| Spellability | 78 | /aʊ/ has two common spellings — `ou`, `ow`; plausible misspellings `scowt`, `skout` |
-| Distinctiveness | 62 | neighbourhood density 7 (61st pct: `scoot`, `stout`, `shout`…); no rare letters |
-| Rhythm & recall | 90 | monosyllable — maximally reproducible |
-| Verbability | 95 | already a verb ("to scout", "a scouter"); 1 syllable |
-| International robustness | 88 | no hard phonemes; /aʊ/ near-universal |
+| Pronounceability | 96 | 1 syllable; all clusters attested in English; no sonority violation; 1 consonant cluster (-4) |
+| Spellability | 84 | 1 ambiguous grapheme: `ou` (-10); 1 plausible misspelling from hearing it once: scowt (-6) |
+| Distinctiveness | 50 | neighbourhood density 26 (84th percentile of the lexicon); no rare letters (z q x j k) |
+| Rhythm & recall | 90 | monosyllable — maximally reproducible (base 90); stress 1: monosyllable |
+| Verbability | 95 | 1 syllable (base 90); already an English word — inflects without explanation (+5) |
+| International robustness | 96 | no phonemes outside the cross-linguistically common core; 1 consonant cluster — costly for CV-syllable languages (-4) |
 
 **`ergonomics_score`: 85** — the equal-weight mean, profile-independent. The script does not know
 which profile is running. Re-weighting is this critique's job, and it is done in prose below, not
@@ -48,16 +46,35 @@ by recomputing the number.
 
 **Under the venture profile.** Verbability 95 and pronounceability 96 are both dimensions this
 profile weights up, and both are near-ceiling. "Scout it" and "I scouted that paper" are already
-grammatical English; you get the verb for free rather than manufacturing one. Distinctiveness 62
-is the soft spot, and it is the *phonetic* soft spot — seven one-edit neighbours means the name
-sits in a busy region of English sound-space, so it will occasionally be misheard as *scoot* or
-*shout* in noisy audio. That is a small cost. The large distinctiveness problem for this name is
-not phonetic at all; it is in Layer 3.
+grammatical English; you get the verb for free rather than manufacturing one.
 
-Spellability 78 is real but survivable here. `ou`/`ow` is a genuine two-way ambiguity, and the
-name will be misspelled `Skout` by a measurable fraction of people who only ever hear it. Under
-the **feature profile** that would be near-disqualifying. Under the venture profile it costs a
-domain redirect.
+Distinctiveness 50 is the soft spot, and this profile weights distinctiveness **very high**, so it
+does not get a footnote. Neighbourhood density 26 puts Scout at the 84th percentile of the
+lexicon — a genuinely busy stretch of English sound-space, with `scoot`, `scot`, `scour` and `scow`
+sitting one phoneme away. Concretely: Scout will occasionally be misheard as one of those in noisy
+audio, and any feature built on hearing the name — a voice assistant, a phone-support agent typing
+what they heard — needs to disambiguate.
+
+It is worth being precise about which crowding this is, because there are two and they are not the
+same finding. This one is *phonetic*: Layer 1, density in sound-space, computed straight from the
+lexicon. The other, larger crowding problem for this name — Scout APM, Scout Motors, Scout24, the
+Scouting movement — is *semantic and commercial*, and the script has no way to see it; it shows up
+only in Layer 3 below. Per ADR-011, the two readings are reported separately rather than averaged
+into one number. They agree on the direction — Scout is a crowded name — and disagree on the
+mechanism: a busy corner of English phonology versus four organisations already trading on the
+word. Both are real, independently, at the same time, and the Layer 3 crowding is the one that
+actually costs money.
+
+Spellability 84 is comfortable, and lower than it looks on first read. The script finds one
+ambiguous grapheme — `ou`, which carries four common readings (*out*, *soup*, *tough*, *four*) —
+and one plausible one-hearing misspelling, `scowt`. That is a narrower problem than a general
+ambiguity finding: *scout* is familiar enough as a whole word that most people spell it from
+recognition rather than by sounding out the grapheme, so the risk concentrates in the population
+that hears the name with no prior exposure to it. Under the feature profile this score would clear
+that profile's spellability floor (~50, see `01-ergonomics.md` §3) comfortably rather than skating
+close to it. Under the venture profile the cost is smaller still: a domain redirect and a handful
+of misdirected first-time visitors. (The more intuitive misspelling, `Skout`, is not what the
+script flags here — it belongs to Layer 3 below, where it turns out to be a real, separate app.)
 
 ---
 

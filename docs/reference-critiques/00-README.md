@@ -25,11 +25,11 @@ That order is the method, and it comes from PRD §8:
 Between them the three cover every structural property the skill must exhibit:
 
 - all three layers producing **three different shapes** of output — a measurement, an argument, a
-  fact sheet — and **never a composite** (Xzrq is the proof case: ergonomics 30, brandability
+  fact sheet — and **never a composite** (Xzrq is the proof case: ergonomics 34, brandability
   zero, practicality perfectly clean);
 - every leading word used **verbatim**, in the places BUILD-MAP §1 assigns them;
 - both context profiles producing visibly different readings of the same dimensions (`Balance`
-  says distinctiveness 52 is the requirement; `Scout` says distinctiveness is the whole
+  says distinctiveness 60 is close to the requirement; `Scout` says distinctiveness is the whole
   conversation);
 - a counter-argument attached to every brandability position, including the ones that are
   obviously right;
@@ -59,7 +59,7 @@ structural and substantive:
 | Layer 3 | Flags with severity, and an explicit statement that this never gives clearance |
 | Leading words | Present verbatim, not paraphrased |
 | Ending | An argued recommendation and a "what would change this" — not a verdict |
-| Substance | The load-bearing findings are reached. Scout's namespace crowding. Balance beating Spending Power on sibling consistency. Xzrq's distinctiveness 99 being worthless. |
+| Substance | The load-bearing findings are reached. Scout's namespace crowding. Balance beating Spending Power on sibling consistency. Xzrq's distinctiveness 81 being worthless. |
 
 ---
 
@@ -90,28 +90,37 @@ The permitted repairs, in order of preference:
 
 ## Two things these files are honest about
 
-**The ergonomics numbers are provisional.** `scripts/phonetics.py` was written in parallel with
-these targets, against the contract pinned in BUILD-MAP §3, so no target could be produced by
-running it. Each ergonomics block is marked:
+**The ergonomics numbers were provisional, and have since been reconciled.**
+`scripts/phonetics.py` was written in parallel with these targets, against the contract pinned in
+BUILD-MAP §3, so no target could be produced by running it at the time. Each ergonomics block
+carried the marker:
 
 ```html
 <!-- PROVISIONAL: reconcile against real phonetics.py output -->
 ```
 
-and is structured exactly as the contract's `dimensions` object implies, so that reconciliation is
-mechanical: run the script, replace the six scores and their evidence strings, and check whether
-any *prose* claim about a dimension no longer holds. Where a number moves materially, the sentence
-that interpreted it must move with it — that is the only manual part.
+Once the script landed, reconciliation ran per ADR-008: the script's output is authoritative, and
+every hand-estimated number was replaced with the script's real one, with the interpreting prose
+rewritten wherever a number moved enough to change the argument built on it (most notably Balance's
+spellability, which moved from an estimated 89 to a real 66, and every one of Xzrq's six
+dimensions). The `PROVISIONAL` markers are gone from all three critiques; this file's code fence
+above is now the only place that string appears, kept as the historical record of what the marker
+looked like.
 
-`bad-xzrq.md` carries an extra caveat in its comment: the name is not in CMUdict, so its
-transcription is a low-confidence g2p estimate. The syllable count of 0 and the illegal-cluster
-finding hold under any plausible transcription; the exact ARPABET string does not, and the target
-says so rather than presenting an estimate as a measurement.
+`bad-xzrq.md` still carries a caveat in its Layer 1 comment: the name is not in CMUdict, so its
+transcription is a low-confidence g2p estimate. The script does not return a syllable count of
+zero for a name with no vowel — it returns `syllables.count: 1` with an all-consonant structure and
+`stress.shape: "no vowel nucleus"`, plus a matching entry in `warnings`. The target keys on those
+fields rather than on a count of zero, and says out loud that the exact ARPABET string is the
+least reliable part of the document even though the no-nucleus finding itself holds under any
+plausible transcription.
 
-**One number in the PRD does not match one number in the build map.** PRD §4.1 illustrates the
-headline with `Ergonomics 89 · Brandability: exceptional world, crowded namespace · Practicality:
-2 flags`, while the worked Scout JSON in BUILD-MAP §3 yields `ergonomics_score: 85` from its own
-six dimension scores. `venture-scout.md` follows the build map, because that object is the pinned
-contract and the numbers there are internally consistent. `assets/critique-template.md` keeps the
-PRD's string as the illustrative example of the *shape*, which is what it was written to
-demonstrate. Both are recorded here rather than quietly reconciled.
+**One number in the PRD does not match one number in the build map — and this is resolved, not
+open.** PRD §4.1 illustrates the headline with `Ergonomics 89 · Brandability: exceptional world,
+crowded namespace · Practicality: 2 flags`, while the worked Scout JSON in BUILD-MAP §3 yields
+`ergonomics_score: 85` from its own six dimension scores. Running the real script settles it: it
+also returns **85** for Scout, from the same six dimensions the build map's worked example carries.
+So the contract's worked example was right, and the PRD's `89` was exactly what ADR-008 says it
+was — an illustration, not a specification. `venture-scout.md` reports 85, matching the script.
+`assets/critique-template.md` no longer keeps `89` attached to Scout either, for the same reason:
+see the note in that file. Both facts are recorded here rather than left as a live discrepancy.

@@ -33,46 +33,61 @@ concession.**
 
 ## Layer 1 — Ergonomics (computed)
 
-<!-- PROVISIONAL: reconcile against real phonetics.py output -->
-
 `python3 scripts/phonetics.py "Balance"`
 
 **Pronunciation:** `B AE1 L AH0 N S` · /ˈbæləns/ · source `cmudict`, confidence **high**.
 Dictionary word; nothing here is inferred.
 
-**Structure:** 2 syllables, `CVC · VCC`, stress pattern `10` — trochee, the default strong shape
+**Structure:** 2 syllables, `CV · CVCC`, stress pattern `10` — trochee, the default strong shape
 in English.
 
 | Dimension | Score | Evidence |
 |---|---:|---|
-| Pronounceability | 94 | 2 syllables; no clusters in onset; no sonority violation; /ns/ a common coda |
-| Spellability | 89 | one real trap: the `-ance`/`-ence` alternation; plausible misspellings `balence`, `ballance` |
-| Distinctiveness | 52 | neighbourhood density 4 (55th pct: `valance`, `ballads`…); no rare letters |
-| Rhythm & recall | 88 | trochaic disyllable — the most reproducible two-syllable shape in English |
-| Verbability | 88 | already a verb ("to balance"); agentive "balancer"; 2 syllables |
-| International robustness | 82 | /æ/ absent from Spanish, Italian, Japanese (maps to /a/); no `th`, no R–L contrast in-word |
+| Pronounceability | 96 | 2 syllables; all clusters attested in English; no sonority violation; 1 consonant cluster (-4) |
+| Spellability | 66 | 1 ambiguous grapheme: `c` (-10); 4 plausible misspellings from hearing it once: bailance, baylance, beilance, beylance (-24) |
+| Distinctiveness | 60 | neighbourhood density 8 (67th percentile of the lexicon); no rare letters (z q x j k) |
+| Rhythm & recall | 100 | two syllables — the most reproducible length in English (base 100); stress 10: trochee (DA-da) |
+| Verbability | 85 | 2 syllables (base 75); already an English word — inflects without explanation (+5); clips to `bal` (+5) |
+| International robustness | 84 | hard phonemes: /æ/ (-12); 1 consonant cluster — costly for CV-syllable languages (-4) |
 
 **`ergonomics_score`: 82** — equal-weight mean, profile-independent. The re-weighting below is
 prose, not a recomputed number.
 
 **Under the feature profile.**
 
-- **Spellability 89 is the dimension that matters most here, and it is the only one carrying a
-  real ding.** `-ance`/`-ence` is among the most-missed spelling patterns in English. In practice
-  this costs almost nothing, because a feature label is *read*, not transcribed from hearing —
-  the user sees the word before they ever type it, and they rarely type it at all. Note the
-  asymmetry: under the venture profile, spellability failures cost you domain typos and word of
-  mouth. Under the feature profile they cost you in-app search. In-app search is a smaller
-  surface, so an 89 here is comfortable.
-- **Distinctiveness 52 is not a weakness under this profile. It is the requirement.** A feature
-  name that scored 95 on distinctiveness would be a coined word on a screen where the user needs
-  to understand, not to remember. This is the single clearest illustration of why a
-  profile-independent composite would be worse than useless: 52 is bad news for a venture and
-  good news here, and one number cannot say both.
-- **Verbability 88 is largely irrelevant.** Nobody says "let me balance that" about checking an
+- **Spellability 66 is the dimension that matters most here, and it is a real finding, not a
+  minor ding — say so rather than talking around it.** The script's evidence is not the
+  `-ance`/`-ence` ending; the `c` is only a secondary, -10 contributor. The larger cost is the
+  first syllable: heard once and never seen, `bal-` plausibly gets written `bail-`, `bayl-`,
+  `beil-` or `beyl-` — four distinct one-hearing misspellings, all landing on the same vowel, for
+  -24 points. That is a trap at the front of the word, not a footnote at the end of it, and 66
+  sits in the "acceptable with a named cost" band (60–74), not the "comfortable" band the earlier
+  estimate implied.
+
+  This complicates the tidy story rather than merely decorating it — this profile weights
+  spellability up precisely because it is supposed to be close to a non-issue, and here it is not
+  quite that. What keeps it survivable is the *channel*, not the score. A feature label is read
+  far more often than it is transcribed from memory: the user sees "Balance" rendered on screen
+  before they ever have to spell it, and that dominant channel is close to immune to a
+  hearing-based misspelling. The four misspellings above are a live risk in the channels where the
+  word is heard before it is seen — a support call, a voice assistant, a colleague describing the
+  screen out loud, in-app search driven by dictation — and a much smaller risk in the channel that
+  actually matters most for this candidate. Under the venture profile the same score would cost
+  domain typos and word of mouth; under the feature profile it costs in-app search and
+  support-transcript accuracy, and only for the slice of users who reach the word by ear. That
+  slice is real but it is not the primary one, which is why the recommendation below still holds —
+  but it holds because of that argument, not because 66 was quietly comfortable.
+- **Distinctiveness 60 is not a weakness under this profile. It is close to the requirement.** A
+  feature name that scored 95 on distinctiveness would be a coined word on a screen where the user
+  needs to understand, not to remember. This is the single clearest illustration of why a
+  profile-independent composite would be worse than useless: 60 is unremarkable for a venture and
+  fine here, and one number cannot say both.
+- **Verbability 85 is largely irrelevant.** Nobody says "let me balance that" about checking an
   account. The profile weights this down and the score can be ignored rather than celebrated.
-- **International robustness 82** is the second-most-relevant dimension for a shipped feature,
-  and it is fine. See the localisation note in Layer 3 — the risk is not phonetic.
+- **International robustness 84** is the second-most-relevant dimension for a shipped feature, and
+  it is fine. /æ/ is genuinely absent from Italian, Japanese, Mandarin, Portuguese, Russian and
+  Spanish and maps to the nearest local vowel in each — cosmetic, not a barrier. See the
+  localisation note in Layer 3 for the risk that actually matters, which is not phonetic.
 
 **Compare `Spending Power` on the same measures:** 4 syllables across 2 words, stress `10 · 10`,
 and — decisively — it is a *phrase*, not a name. Phrases do not fit in a tab bar, do not survive
@@ -251,8 +266,11 @@ Not a verdict. An argued recommendation; you decide.
 
 The reasoning, in the order the layers were run:
 
-1. **Ergonomics 82** is comfortable, and the one soft spot — `-ance`/`-ence` spellability — sits
-   on a surface where labels are read rather than typed.
+1. **Ergonomics 82** is comfortable overall, but spellability's real 66 is the one number in this
+   critique that does not simply confirm the thesis. The risk sits on the first syllable
+   (`bal-` heard as `bail-`/`bayl-`/`beil-`/`beyl-`), not on a suffix, and it lands mainly on the
+   heard-not-read channel rather than on the UI surface itself — which is why the recommendation
+   still holds, but for a stated reason rather than by default.
 2. **Brandability says "no world, exact fit,"** and under this profile that is the target
    outcome, not a shortfall. Perfect fidelity with near-zero breadth is what a feature label
    should look like. *Spending Power* has more breadth, worse fidelity, and introduces a question

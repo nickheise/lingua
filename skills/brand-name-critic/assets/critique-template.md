@@ -8,7 +8,7 @@ article: `docs/reference-critiques/{venture-scout,feature-balance,bad-xzrq}.md`.
 ## The headline — three verdicts, never a composite
 
 ```
-Ergonomics 89 · Brandability: exceptional world, crowded namespace · Practicality: 2 flags
+Ergonomics 85 · Brandability: exceptional world, crowded namespace · Practicality: 2 flags
 ```
 
 **A number, a clause, a count.** Three different shapes because the three layers have three

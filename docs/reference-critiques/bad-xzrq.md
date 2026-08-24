@@ -4,12 +4,12 @@
 rationale from the proposer:** "high-value Scrabble letters, nobody owns it, the domain is
 definitely free" · **Run:** hand-written target, Phase 1
 
-**Ergonomics 30 · Brandability: no world, no reader · Practicality: 0 flags**
+**Ergonomics 34 · Brandability: no world, no reader · Practicality: 0 flags**
 
 Read the third verdict again. **Practicality is completely clean** — no trademark conflict, no
 domain problem, no SEO collision, no cross-cultural hazard — and the name is still unusable. A
-composite score would have averaged a 30, an argued zero and a clean sheet into something in the
-sixties and told you nothing. The layers do not average because they are not measuring
+composite score would have averaged a 34, an argued zero and a clean sheet into something in the
+forties and told you nothing. The layers do not average because they are not measuring
 commensurable things.
 
 This critique also demonstrates the harder discipline: **a disastrous name still gets an argued
@@ -31,10 +31,10 @@ It does not.
 
 ## Layer 1 — Ergonomics (computed)
 
-<!-- PROVISIONAL: reconcile against real phonetics.py output. This name is not in CMUdict, so the
-     transcription comes from the g2p fallback and the exact ARPABET string is the least reliable
-     part of this document. Syllable count 0 and the illegal-cluster list are the load-bearing
-     facts and they hold under any plausible transcription. -->
+<!-- This name is not in CMUdict, so the transcription comes from the g2p fallback and the exact
+     ARPABET string is the least reliable part of this document. The presence of a "no vowel
+     nucleus" stress shape and the illegal-cluster/sonority-violation findings hold under any
+     plausible transcription; the fine phonetic detail does not. -->
 
 `python3 scripts/phonetics.py "Xzrq"`
 
@@ -43,44 +43,64 @@ It does not.
 > **Confidence warning, stated before any number is read.** This name is not in the dictionary.
 > The transcription above is a grapheme-to-phoneme *estimate*, and every score below inherits that
 > uncertainty. Treat the numbers as indicative rather than measured, and say so out loud rather
-> than presenting an estimate as a measurement. `warnings: ["pronunciation inferred by g2p; treat
-> as low confidence", "no vowel nucleus detected; syllabification failed"]`
+> than presenting an estimate as a measurement. `warnings: ["\"xzrq\" is not in the dictionary;
+> pronunciation inferred by rule-based g2p — treat as low confidence", "no vowel nucleus: the name
+> has no syllable an English speaker can produce"]`
 
-**Structure:** 0 syllables. `structures: []`. The syllabifier found no nucleus, which is not a
-low score on a dimension — it is the dimension failing to apply. Stress pattern is empty;
-`shape: "no-nucleus"`.
+**Structure:** the script reports `syllables.count: 1`, structure `CCCC` — an all-consonant
+"syllable" with nothing to anchor it, kept as a count of one rather than zero only so the output's
+array lengths stay consistent. **Key on `stress.shape`, not on the count**: it reads `"no vowel
+nucleus"`, `stress.pattern` is `"0"`, and the matching `warnings` entry says the same thing in
+words: *the name has no syllable an English speaker can produce.* This is not a low score on a
+dimension — it is the dimension failing to apply.
 
-**Phonotactics:** `illegal_clusters: ["/zz/ (geminate onset — not an English contrast)", "/zzr/",
-"/zrk/"]` · `sonority_violations: ["onset rises to no nucleus"]` · `max_onset_length: 4`.
-English permits a maximum three-consonant onset and only in the strict template /s/ + voiceless
-stop + liquid or glide (*spr-*, *str-*, *skw-*). /zzrk/ matches nothing.
+**Phonotactics:** the whole word syllabifies as one onset, `/zzrk/` (`Z Z R K`), with nowhere for
+it to land. `illegal_clusters` flags that onset outright: *"onset /zzrk/ is not an attested English
+onset."* `sonority_violations` finds two contributing failures inside it — `/zz/`, fricative into
+fricative, *"does not rise in sonority"*; and `/rk/`, liquid into stop, same failure. `max_onset_length: 4`.
+English's real ceiling is three, and only in the strict /s/ + voiceless stop + liquid/glide
+template (*spr-*, *str-*, *skw-*); nothing here is that template.
 
-**Orthography:** `rare_letters: ["x","z","r","q"]` (three of the four Scrabble-heavy set) ·
-`rare_letter_common_sound: false` · `ambiguous_graphemes: ["q not followed by u", "xz"]`.
+**Orthography:** `rare_letters: ["q","x","z"]` — three of the five Scrabble-heavy set (z q x j k) —
+`rare_letter_common_sound: false`. Two `ambiguous_graphemes`: `x` (three readings — /ks/ *box*,
+/z/ *Xerox*, /ɡz/ *exam* — with initial `x` conventionally /z/ and medial `x` conventionally /ks/)
+and `q` (*"not followed by u has no conventional English value"*).
 
 | Dimension | Score | Evidence |
 |---|---:|---|
-| Pronounceability | 8 | 0 syllables; no vowel nucleus; illegal onset /zzrk/; sonority never rises |
-| Spellability | 18 | cannot be transcribed from hearing because it cannot be said; `q` without `u` has no English precedent; `xz` is not an attested English digraph |
-| **Distinctiveness** | **99** | neighbourhood density 0; no one-edit neighbours exist; 4 rare letters |
-| Rhythm & recall | 25 | no stress pattern; nothing rhythmic to reproduce; recall is visual-only |
-| Verbability | 12 | no verb form; no agentive; no clipping that is pronounceable |
-| International robustness | 20 | not phonotactically legal in any major language; risk `high` |
+| Pronounceability | 6 | 1 syllable; no vowel nucleus — cannot be produced as a syllable (-40); 1 illegal cluster: /zzrk/ (-18); 2 sonority violations: /rk/, /zz/ (-24); 1 consonant cluster (-4); longest cluster is 4 consonants (-8) |
+| Spellability | 25 | 2 ambiguous graphemes: `x`, `q` (-20); 2 plausible misspellings from hearing it once: xzrck, xzrk (-12); rare letter on a rare or illegal sound (-10); consonant letter run `xzrq` — hard to reconstruct in writing (-8); no vowel letter — cannot be spelled from hearing it (-25) |
+| **Distinctiveness** | **81** | neighbourhood density 1 (31st percentile of the lexicon); rare letters `q`, `x`, `z`, but not on common sounds — no bonus |
+| Rhythm & recall | 5 | no vowel nucleus — there is no rhythm to reproduce; clusters English does not license make it hard to repeat back (-15) |
+| Verbability | 30 | 1 syllable (base 90); no vowel nucleus — cannot be inflected (-50); illegal clusters block clean inflection (-10) |
+| International robustness | 56 | no phonemes outside the cross-linguistically common core; 1 consonant cluster — costly for CV-syllable languages (-12); longest cluster 4 consonants (-12); no vowel nucleus (-20) |
 
-**`ergonomics_score`: 30** — equal-weight mean.
+This is a case where `01-ergonomics.md`'s rule on when not to lead with `ergonomics_score` applies
+several times over, not once: `stress.shape` is `"no vowel nucleus"`, `illegal_clusters` is
+non-empty, a dimension scores below 40 (four of the six do), and `pronunciation.confidence` is
+`low`. Four of the four triggers. The breakdown above is why this critique leads with it and states
+the mean second, not the reverse.
 
-**The trap, and it is the most instructive line in this document.** Distinctiveness scores **99**
-— the highest score anywhere in these three reference critiques, higher than Scout on any
-dimension — and distinctiveness is a dimension the venture profile weights **up**. Re-weight
-honestly for the venture profile and Xzrq *improves*.
+**`ergonomics_score`: 34** — equal-weight mean, and the mean is misleading here in the specific way
+the rule warns about: it reads as a middling, salvageable name, and it is neither.
 
-It improves to unusable. This is the strongest available demonstration that **dimension scores are
-not tradeable against each other.** Pronounceability at 8 is not compensable by distinctiveness at
-99, because a name that cannot be said cannot be transmitted, and every downstream property —
-word of mouth, recall, verbability, the ability to say it on a podcast — is gated behind being
-sayable. Some dimensions are floors, not terms in a sum. `ergonomics_score` averages them because
-an average is what a mean is; the interpretation layer exists precisely to notice when the average
-is lying.
+**The trap, and it is the most instructive line in this document.** Distinctiveness scores **81** —
+comfortably the highest score in Xzrq's own table, and higher on the *same dimension* than either
+of the other two critiques' names score: Scout's phonetic-distinctiveness reading is 50, Balance's
+is 60. By the script's own measure, the coined string is the most distinctive-sounding of the three
+names — and distinctiveness is a dimension the venture profile weights **up**. Re-weight honestly
+for the venture profile and the distinctiveness axis genuinely *improves* the reading.
+
+It does not improve the name. Pronounceability sits at 6, rhythm at 5, verbability at 30 — three
+outright floor breaches sitting under one 81. This is the strongest available demonstration that
+**dimension scores are not tradeable against each other.** Pronounceability at 6 is not compensable
+by distinctiveness at 81, because a name that cannot be said cannot be transmitted, and every
+downstream property — word of mouth, recall, verbability, the ability to say it on a podcast — is
+gated behind being sayable. Some dimensions are floors, not terms in a sum. `ergonomics_score`
+averages them because an average is what a mean is; the interpretation layer exists precisely to
+notice when the average is lying — and here it is lying twice, once by sitting at a deceptively
+survivable-looking 34, and once by letting one clean 81 hide three catastrophic floor breaches
+underneath it.
 
 ### `rare letters, common sounds` — why Xerox works and Xzrq does not
 
@@ -94,7 +114,7 @@ notice the contradiction. His own examples resolve it — and they resolve this 
 | **Kodak** | K, K | /k/ — one of the most common consonants in English | 2 (KOH-dak) | /k/, /d/ — legal | ✅ |
 | **Coke** | K | /k/ | 1 | /k/ — legal | ✅ |
 | **Zillow** | Z | /z/ | 2 (ZIL-oh) | /z/, /l/ — legal | ✅ |
-| **Xzrq** | X, Z, R, Q | /zz/ geminate, then no nucleus at all | **0** | /zzrk/ — illegal | ❌ |
+| **Xzrq** | X, Z, R, Q | /zz/ geminate, then no nucleus at all | **no vowel nucleus** | /zzrk/ — illegal | ❌ |
 
 The rule is `rare letters, common sounds`, and it has two halves that must both hold:
 
@@ -248,9 +268,9 @@ are read as three different kinds of statement rather than three inputs to an av
 Not a verdict. An argued recommendation; you decide. Even here.
 
 **Do not ship Xzrq.** The reason is a single dimension, not a general dismissal:
-pronounceability 8 with zero syllables. That one number gates word of mouth, recall, verbability,
-voice input, and the ability to say the company's name out loud — and no other score compensates,
-because it is a floor rather than a term in a sum.
+pronounceability 6, driven by a name with no vowel nucleus at all. That one dimension gates word
+of mouth, recall, verbability, voice input, and the ability to say the company's name out loud —
+and no other score compensates, because it is a floor rather than a term in a sum.
 
 **Keep the instinct. It was correct.** The proposer wanted low neighbourhood density, a clean
 search result, an available domain and a fanciful trademark tier. Those are the right things to
