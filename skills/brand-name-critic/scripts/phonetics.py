@@ -421,6 +421,8 @@ def _build_rules():
     add("g", lambda w, i: _nxt(w, i, 1) in ("e", "y"), ["JH"])
     add("g", None, ["G"])
     add("y", lambda w, i: i == 0, ["Y"])
+    add("y", lambda w, i: i > 0 and (i + 2) in _silent_e_positions(w)
+        and _nxt(w, i, 1) not in _VOWEL_LETTERS_Y, ["AY"])   # type, strype
     add("y", lambda w, i: F(w, i, 1) and any(c in _VOWEL_LETTERS for c in w[:i]), ["IY"])
     add("y", lambda w, i: F(w, i, 1), ["AY"])
     add("y", None, ["IH"])
@@ -723,6 +725,15 @@ def check_phonotactics(sylls: List[Syllable]) -> Dict[str, object]:
         core = list(coda)
         while len(core) > 1 and strip_stress(core[-1]) in CODA_APPENDIX:
             core.pop()
+        if len(core) >= 3 and any(_sonority(a) < _sonority(b)
+                                  for a, b in zip(core, core[1:])):
+            illegal.append({
+                "cluster": [strip_stress(p) for p in core],
+                "position": "coda",
+                "syllable": idx,
+                "note": "coda {0} is three or more consonants and does not fall in "
+                        "sonority; English licenses neither".format(_fmt(core)),
+            })
         for a, b in zip(core, core[1:]):
             if _sonority(a) < _sonority(b):
                 violations.append({
@@ -1043,12 +1054,12 @@ SPELLINGS: Dict[str, List[str]] = {
     "AA": ["o", "a", "ah", "au"],
     "AE": ["a", "ah"],
     "AH": ["a", "u", "o", "e", "ah"],
-    "AO": ["aw", "au", "o", "ough"],
+    "AO": ["aw", "au", "o"],
     "AW": ["ou", "ow"],
-    "AY": ["i", "y", "ie", "igh", "ye"],
+    "AY": ["i", "y", "ie"],
     "EH": ["e", "ea", "ai"],
     "ER": ["er", "ur", "ir", "or", "ar", "yr"],
-    "EY": ["a", "ai", "ay", "ei", "ey", "eigh"],
+    "EY": ["a", "ai", "ay", "ei", "ey"],
     "IH": ["i", "y", "e"],
     "IY": ["ee", "ea", "e", "ie", "y", "i"],
     "OW": ["o", "oa", "ow", "oe"],
@@ -1058,18 +1069,49 @@ SPELLINGS: Dict[str, List[str]] = {
     "B": ["b", "bb"], "CH": ["ch", "tch"], "D": ["d", "dd"],
     "DH": ["th"], "F": ["f", "ph", "ff"], "G": ["g", "gg", "gh"],
     "HH": ["h", "wh"], "JH": ["j", "g", "dg", "ge"],
-    "K": ["k", "c", "ck", "q", "ch"], "L": ["l", "ll"],
-    "M": ["m", "mm"], "N": ["n", "nn", "kn", "gn"],
-    "NG": ["ng", "n"], "P": ["p", "pp"], "R": ["r", "rr", "wr"],
+    "K": ["k", "c", "ck"], "L": ["l", "ll"],
+    "M": ["m", "mm"], "N": ["n", "nn"],
+    "NG": ["ng", "n"], "P": ["p", "pp"], "R": ["r", "rr"],
     "S": ["s", "ss", "c", "sc", "ce"], "SH": ["sh", "ti", "ci", "ch"],
     "T": ["t", "tt"], "TH": ["th"], "V": ["v", "vv"],
     "W": ["w", "wh"], "Y": ["y", "i"], "Z": ["z", "s", "zz", "x"],
     "ZH": ["si", "ge", "s"],
-    "K S": ["x", "cks", "ks", "cs"],
+    "K S": ["x", "cks", "ks"],
     "NG G": ["ng", "ngu"],
     "K W": ["qu", "kw", "cw"],
     "Y UW": ["u", "ew", "ue", "eu"],
 }
+
+_GEMINATES = frozenset(["bb", "cc", "dd", "ff", "gg", "kk", "ll", "mm", "nn",
+                        "pp", "rr", "ss", "tt", "vv", "zz"])
+_FINAL_GEMINATES = frozenset(["ss", "ll", "ff", "zz"])
+
+
+def _spellable(tok: str) -> bool:
+    """Orthographic plausibility gate for a generated misspelling.
+
+    English spelling conventions that no misspeller violates: a word does not
+    begin with a geminate or with <ck>, a geminate sits between a vowel and
+    whatever follows, <q> is followed by <u>, and no letter appears three times
+    running.
+    """
+    if len(tok) < 2:
+        return False
+    if tok[:2] in _GEMINATES or tok[:2] == "ck":
+        return False
+    if tok[-2:] in _GEMINATES and tok[-2:] not in _FINAL_GEMINATES:
+        return False
+    for i in range(1, len(tok) - 1):
+        if tok[i] == tok[i + 1] and tok[i:i + 2] in _GEMINATES:
+            if tok[i - 1] not in "aeiouy":
+                return False
+    for i in range(len(tok) - 2):
+        if tok[i] == tok[i + 1] == tok[i + 2]:
+            return False
+    for i, ch in enumerate(tok):
+        if ch == "q" and tok[i + 1:i + 2] != "u":
+            return False
+    return True
 
 MAX_HOMOPHONES = 8
 
@@ -1101,11 +1143,8 @@ def homophone_spellings(tokens: Sequence[str]) -> List[str]:
                 new_tok = "".join(
                     alt if k == si else g for k, (g, _) in enumerate(segs)
                 )
-                if new_tok == tokens[ti] or len(new_tok) < 2:
+                if new_tok == tokens[ti] or not _spellable(new_tok):
                     continue
-                if new_tok[:2] in ("bb", "dd", "ff", "gg", "ll", "mm", "nn",
-                                   "pp", "rr", "ss", "tt", "zz", "vv", "cc"):
-                    continue      # English words do not begin with a geminate
                 cand = list(tokens)
                 cand[ti] = new_tok
                 candidates.add(" ".join(cand))
@@ -1304,6 +1343,21 @@ def agentive_form(letters: str, syllable_count: int) -> str:
 # ===========================================================================
 
 
+def _consonant_runs(letters: str) -> List[str]:
+    runs: List[str] = []
+    cur = ""
+    for ch in letters:
+        if ch in "aeiouy" or ch == " ":
+            if cur:
+                runs.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    if cur:
+        runs.append(cur)
+    return runs
+
+
 def _clamp(x: float) -> int:
     return int(max(0, min(100, round(x))))
 
@@ -1353,8 +1407,8 @@ def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
             clusters2, "" if clusters2 == 1 else "s", 4 * clusters2))
     over = max(0, longest_cluster - 3)
     if over:
-        score -= 5 * over
-        ev.append("longest cluster is {0} consonants (-{1})".format(longest_cluster, 5 * over))
+        score -= 8 * over
+        ev.append("longest cluster is {0} consonants (-{1})".format(longest_cluster, 8 * over))
     pronounceability = {"score": _clamp(score), "evidence": ev}
 
     # -- 2. spellability ---------------------------------------------------
@@ -1382,6 +1436,13 @@ def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
     if rlcs is False:
         score -= 10
         ev.append("rare letter on a rare or illegal sound (-10)")
+    runs = _consonant_runs(letters)
+    long_runs = [r for r in runs if len(r) >= 4]
+    if long_runs:
+        pen = min(16, 8 * len(long_runs))
+        score -= pen
+        ev.append("consonant letter run{0} <{1}> — hard to reconstruct in writing (-{2})".format(
+            "" if len(long_runs) == 1 else "s", ">, <".join(long_runs), pen))
     if not any(c in "aeiouy" for c in letters):
         score -= 25
         ev.append("no vowel letter — cannot be spelled from hearing it (-25)")
@@ -1426,10 +1487,11 @@ def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
         if n_syl == 3 and shape.startswith("dactyl"):
             score += 4
             ev.append("dactylic — the strongest three-syllable pattern (+4)")
-    if illegal:
-        pen = min(15, 5 * len(illegal))
+    if illegal or sonority:
+        pen = min(15, 5 * (len(illegal) + len(sonority)))
         score -= pen
-        ev.append("illegal clusters make it hard to repeat back (-{0})".format(pen))
+        ev.append("clusters English does not license make it hard to repeat back "
+                  "(-{0})".format(pen))
     if len(letters) > 10:
         score -= 6
         ev.append("{0} letters — long for recall (-6)".format(len(letters)))
@@ -1457,6 +1519,9 @@ def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
     if illegal:
         score -= 10
         ev.append("illegal clusters block clean inflection (-10)")
+    elif sonority:
+        score -= 6
+        ev.append("sonority violations make inflected forms awkward (-6)")
     verbability = {"score": _clamp(score), "evidence": ev}
 
     # -- 6. international robustness ----------------------------------------
@@ -1493,3 +1558,253 @@ def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
         "verbability": verbability,
         "international_robustness": international,
     }
+
+
+# ===========================================================================
+# 8. Pronunciation resolution and the top-level analysis
+# ===========================================================================
+
+MIN_COMPOUND_PART = 3        # letters
+MIN_COMPOUND_PHONEMES = 3    # phonemes
+MAX_NEIGHBORS = 12
+
+
+def decompose(token: str, lex: Lexicon) -> Optional[Tuple[str, str]]:
+    """Split a token into two known lexicon words (firefox -> fire + fox).
+
+    Among all valid splits the one with the largest smaller part wins; ties go
+    to the leftmost split point. Both parts must be at least three letters AND
+    at least three phonemes, so "ox", "low", "an" and similar fragments cannot
+    manufacture a decomposition. (Without the phoneme floor, CMUdict's large
+    surname inventory reads "Zillow" as "zill" + "low".)
+    """
+    n = len(token)
+    if n < MIN_COMPOUND_PART * 2:
+        return None
+    best: Optional[Tuple[int, int, Tuple[str, str]]] = None
+    for i in range(MIN_COMPOUND_PART, n - MIN_COMPOUND_PART + 1):
+        left, right = token[:i], token[i:]
+        if left in lex.words and right in lex.words \
+                and len(lex.words[left]) >= MIN_COMPOUND_PHONEMES \
+                and len(lex.words[right]) >= MIN_COMPOUND_PHONEMES:
+            rank = (min(len(left), len(right)), -i)
+            if best is None or rank > best[:2]:
+                best = (rank[0], rank[1], (left, right))
+    return best[2] if best else None
+
+
+def resolve_token(token: str, lex: Lexicon) -> Tuple[List[str], str, str, List[str]]:
+    """-> (phones, source, confidence, warnings)"""
+    if token in lex.words:
+        return list(lex.words[token]), "cmudict", "high", []
+    parts = decompose(token, lex)
+    if parts:
+        second = [p.replace("1", "2") if p[-1:] == "1" else p for p in lex.words[parts[1]]]
+        phones = list(lex.words[parts[0]]) + second
+        return (phones, "cmudict-compound", "medium",
+                ['"{0}" is not in the dictionary; read as the compound "{1}" + "{2}"'.format(
+                    token, parts[0], parts[1])])
+    return (g2p(token), "g2p", "low",
+            ['"{0}" is not in the dictionary; pronunciation inferred by rule-based g2p '
+             '— treat as low confidence'.format(token)])
+
+
+_SOURCE_RANK = {"cmudict": 0, "cmudict-compound": 1, "g2p": 2}
+_CONFIDENCE_RANK = {"high": 0, "medium": 1, "low": 2}
+
+
+def normalize(name: str) -> Tuple[str, List[str]]:
+    """-> (normalized display string, token list)
+
+    Multi-word and hyphenated input is supported: each token is looked up
+    separately and the phoneme strings are concatenated, which is also how the
+    syllabification is done (syllables never straddle a word boundary).
+    """
+    cleaned = []
+    for ch in name.lower():
+        if ch.isalpha() and ch.isascii():
+            cleaned.append(ch)
+        elif ch.isspace() or ch in "-_/&+.":
+            cleaned.append(" ")
+    normalized = " ".join("".join(cleaned).split())
+    return normalized, [t for t in normalized.split(" ") if t]
+
+
+def analyze(name: str, lex: Optional[Lexicon] = None) -> Dict[str, object]:
+    """Measure one candidate name. Returns the full contract object."""
+    if lex is None:
+        lex = get_lexicon()
+    normalized, tokens = normalize(name)
+    warnings: List[str] = []
+
+    if not tokens:
+        warnings.append("input contains no alphabetic characters; nothing to measure")
+
+    phones: List[str] = []
+    token_phones: List[List[str]] = []
+    sylls: List[Syllable] = []
+    source, confidence = "cmudict", "high"
+    for tok in tokens:
+        tp, tsrc, tconf, twarn = resolve_token(tok, lex)
+        warnings.extend(twarn)
+        token_phones.append(tp)
+        phones.extend(tp)
+        sylls.extend(syllabify(tp))
+        if _SOURCE_RANK[tsrc] > _SOURCE_RANK[source]:
+            source = tsrc
+        if _CONFIDENCE_RANK[tconf] > _CONFIDENCE_RANK[confidence]:
+            confidence = tconf
+    if not tokens:
+        source, confidence = "g2p", "low"
+
+    has_nucleus = any(s.nucleus is not None for s in sylls)
+    if sylls and not has_nucleus:
+        warnings.append("no vowel nucleus: the name has no syllable an English "
+                        "speaker can produce")
+
+    phonotactics = check_phonotactics(sylls)
+    stress = stress_profile(sylls)
+    letters_only = normalized.replace(" ", "")
+
+    # -- neighbourhood -----------------------------------------------------
+    key = strip_stress_seq(phones)
+    if key:
+        neighbor_words = lex.neighbors(key, exclude=set(tokens) | {letters_only})
+    else:
+        neighbor_words = []
+    density = len(neighbor_words)
+    percentile = lex.percentile(density)
+    coverage = "complete" if len(key) <= lex.max_phonemes - 1 else "truncated"
+    if coverage == "truncated":
+        warnings.append(
+            "{0} phonemes exceeds the lexicon's {1}-phoneme cutoff, so neighbours one "
+            "insertion longer are not represented; density is a lower bound".format(
+                len(key), lex.max_phonemes))
+
+    # -- orthography -------------------------------------------------------
+    amb = ambiguous_graphemes(letters_only)
+    homo = homophone_spellings(tokens) if tokens else []
+    rare_present = [c for c in RARE_LETTERS if c in letters_only]
+    rlcs = rare_letter_common_sound(letters_only, phones, phonotactics, has_nucleus)
+
+    intl = international_profile(phones, sylls)
+
+    clips = clip_candidates(letters_only) if len(tokens) == 1 else []
+    ends_vowel = bool(phones) and is_vowel(phones[-1])
+
+    ctx = {
+        "syllables": sylls,
+        "phonotactics": phonotactics,
+        "has_nucleus": has_nucleus,
+        "ambiguous": amb,
+        "homophones": homo,
+        "rare_letter_common_sound": rlcs,
+        "rare_letters": rare_present,
+        "letters_only": letters_only,
+        "percentile": percentile,
+        "density": density,
+        "stress": stress,
+        "clips": clips,
+        "ends_in_vowel": ends_vowel,
+        "in_lexicon": all(t in lex.words for t in tokens) if tokens else False,
+        "international": intl,
+    }
+    dims = _dimensions(ctx)
+    ergonomics = int(round(sum(d["score"] for d in dims.values()) / float(len(dims))))
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "input": name,
+        "normalized": normalized,
+        "pronunciation": {
+            "source": source,
+            "confidence": confidence,
+            "arpabet": list(phones),
+            "ipa": " ".join(to_ipa(tp) for tp in token_phones),
+        },
+        "syllables": {
+            "count": len(sylls),
+            "structures": [s.structure for s in sylls],
+            "onsets": [[strip_stress(p) for p in s.onset] for s in sylls],
+            "codas": [[strip_stress(p) for p in s.coda] for s in sylls],
+        },
+        "stress": stress,
+        "phonotactics": phonotactics,
+        "orthography": {
+            "letters": len(letters_only),
+            "rare_letters": rare_present,
+            "rare_letter_common_sound": rlcs,
+            "ambiguous_graphemes": amb,
+            "homophone_spellings": homo,
+        },
+        "neighborhood": {
+            "density": density,
+            "neighbors": neighbor_words[:MAX_NEIGHBORS],
+            "percentile": percentile,
+            "coverage": coverage,
+        },
+        "international": {
+            "hard_phonemes": intl["hard_phonemes"],
+            "affected_languages": intl["affected_languages"],
+            "risk": intl["risk"],
+        },
+        "verbability": {
+            "syllable_count": len(sylls),
+            "ends_in_vowel": ends_vowel,
+            "clippable_to": clips,
+            "verb_form": "to {0}".format(normalized) if normalized else "",
+            "agentive": agentive_form(letters_only, len(sylls)),
+        },
+        "dimensions": dims,
+        "ergonomics_score": ergonomics,
+        "warnings": warnings,
+    }
+
+
+# ===========================================================================
+# 9. CLI
+# ===========================================================================
+
+def read_name_file(path: str) -> List[str]:
+    names: List[str] = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.split("#", 1)[0].strip()
+            if line:
+                names.append(line)
+    return names
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    ap = argparse.ArgumentParser(
+        prog="phonetics.py",
+        description="Deterministic phonetic measurement for brand-name-critic. "
+                    "Emits one JSON object per name (a JSON array for more than one).")
+    ap.add_argument("names", nargs="*", help="candidate names")
+    ap.add_argument("--file", help="read names from PATH, one per line; '#' starts a comment")
+    ap.add_argument("--pretty", action="store_true", help="indent the JSON output")
+    ap.add_argument("--version", action="version",
+                    version="phonetics.py {0} (schema {1})".format(TOOL_VERSION, SCHEMA_VERSION))
+    args = ap.parse_args(argv)
+
+    names = list(args.names)
+    if args.file:
+        names.extend(read_name_file(args.file))
+    if not names:
+        ap.error("no names given; pass names as arguments or use --file")
+
+    lex = get_lexicon()
+    results = [analyze(n, lex) for n in names]
+    payload: object = results[0] if len(results) == 1 else results
+    kwargs = {"ensure_ascii": False, "sort_keys": False}
+    if args.pretty:
+        kwargs["indent"] = 2
+    else:
+        kwargs["separators"] = (",", ":")
+    sys.stdout.write(json.dumps(payload, **kwargs))  # type: ignore[arg-type]
+    sys.stdout.write("\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
