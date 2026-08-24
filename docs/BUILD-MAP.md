@@ -50,72 +50,72 @@ steering failed and the words get stronger or more consistent — the skill is n
 
 ## 2. File inventory
 
-Status legend: `▢` not started · `◐` in progress · `▣` built · `✅` reviewed & accepted
+Status legend: `▣` not started · `◐` in progress · `▣` built · `✅` reviewed & accepted
 
 ```
 lingua/
 ├── .claude-plugin/
-│   ├── plugin.json                        ▢  P0  manifest
-│   └── marketplace.json                   ▢  P0  single-plugin marketplace, installable from the repo
-├── README.md                              ▢  P0  what it is, install, the three skills, method
-├── CHANGELOG.md                           ▢  P0  Keep a Changelog; one entry per phase
-├── LICENSE                                ▢  P0  MIT
-├── .gitignore                             ▢  P0
+│   ├── plugin.json                        ▣  P0  manifest
+│   └── marketplace.json                   ▣  P0  single-plugin marketplace, installable from the repo
+├── README.md                              ▣  P0  what it is, install, the three skills, method
+├── CHANGELOG.md                           ▣  P0  Keep a Changelog; one entry per phase
+├── LICENSE                                ▣  P0  MIT
+├── .gitignore                             ▣  P0
 │
 ├── docs/
-│   ├── PRD.md                             ▢  P0  source spec, checked in verbatim
-│   ├── BUILD-MAP.md                       ▢  P0  this file
-│   ├── DECISIONS.md                       ▢  P0  ADR log — every judgment call, with rationale
-│   └── reference-critiques/               ▢  P1  hand-written ideal outputs (§8 method note)
-│       ├── 00-README.md                   ▢      how these are used as build targets
-│       ├── venture-scout.md               ▢      strong venture name
-│       ├── feature-balance.md             ▢      feature/UI name
-│       └── bad-xzrq.md                    ▢      deliberately bad name
+│   ├── PRD.md                             ▣  P0  source spec, checked in verbatim
+│   ├── BUILD-MAP.md                       ▣  P0  this file
+│   ├── DECISIONS.md                       ▣  P0  ADR log — every judgment call, with rationale
+│   └── reference-critiques/               ▣  P1  hand-written ideal outputs (§8 method note)
+│       ├── 00-README.md                   ▣      how these are used as build targets
+│       ├── venture-scout.md               ▣      strong venture name
+│       ├── feature-balance.md             ▣      feature/UI name
+│       └── bad-xzrq.md                    ▣      deliberately bad name
 │
 ├── skills/
 │   ├── brand-name-critic/                          ── PHASE 1 ──
-│   │   ├── SKILL.md                       ▢  MODEL-INVOKED. 4 steps. ≤500 words.
+│   │   ├── SKILL.md                       ▣  MODEL-INVOKED. 4 steps. ≤500 words.
 │   │   ├── references/
-│   │   │   ├── 01-ergonomics.md           ▢  interprets script JSON; 6 dimensions
-│   │   │   ├── 02-brandability.md         ▢  generativity, familiarity, lore, fit, ownability
-│   │   │   ├── 03-practicality.md         ▢  TM tiers, knockout heuristic, domains
-│   │   │   ├── myths-blocklist.md         ▢  Chevy Nova et al. — never repeat as fact
-│   │   │   ├── troubleshooting.md         ▢  self-improvement log (§5.6), seeded empty
+│   │   │   ├── 01-ergonomics.md           ▣  interprets script JSON; 6 dimensions
+│   │   │   ├── 02-brandability.md         ▣  generativity, familiarity, lore, fit, ownability
+│   │   │   ├── 03-practicality.md         ▣  TM tiers, knockout heuristic, domains
+│   │   │   ├── myths-blocklist.md         ▣  Chevy Nova et al. — never repeat as fact
+│   │   │   ├── troubleshooting.md         ▣  self-improvement log (§5.6), seeded empty
 │   │   │   └── profiles/
-│   │   │       ├── venture.md             ▢  weights up distinctiveness/generativity/ownability
-│   │   │       ├── feature.md             ▢  weights up clarity/spellability/sibling consistency
-│   │   │       └── codename.md            ▢  memorability/fun; must never leak into UI
+│   │   │       ├── venture.md             ▣  weights up distinctiveness/generativity/ownability
+│   │   │       ├── feature.md             ▣  weights up clarity/spellability/sibling consistency
+│   │   │       └── codename.md            ▣  memorability/fun; must never leak into UI
 │   │   ├── scripts/
-│   │   │   ├── phonetics.py               ▢  the deterministic layer → JSON
-│   │   │   ├── build_lexicon.py           ▢  reproducible generator for the vendored lexicon
-│   │   │   ├── data/lexicon.txt.gz        ▢  ~112k CMUdict entries ≤10 phonemes, ~700KB
-│   │   │   └── README.md                  ▢  usage, JSON contract, g2p error rate
+│   │   │   ├── phonetics.py               ▣  the deterministic layer → JSON
+│   │   │   ├── build_lexicon.py           ▣  reproducible generator for the vendored lexicon
+│   │   │   ├── data/lexicon.txt.gz        ▣  ~112k CMUdict entries ≤10 phonemes, ~700KB
+│   │   │   └── README.md                  ▣  usage, JSON contract, g2p error rate
 │   │   ├── tests/
-│   │   │   ├── test_phonetics.py          ▢  unit + determinism tests
-│   │   │   └── benchmark.txt              ▢  the 20-name benchmark set
-│   │   └── assets/critique-template.md    ▢  output shape
+│   │   │   ├── test_phonetics.py          ▣  unit + determinism tests
+│   │   │   └── benchmark.txt              ▣  the 20-name benchmark set
+│   │   └── assets/critique-template.md    ▣  output shape
 │   │
 │   ├── brand-name-worlds/                          ── PHASE 2 ──
-│   │   ├── SKILL.md                       ▢  user-invoked. 4 steps. MUST NOT produce names.
+│   │   ├── SKILL.md                       ▣  user-invoked. 4 steps. MUST NOT produce names.
 │   │   ├── references/
-│   │   │   ├── 01-brief.md                ▢  4-question mini-brief; positioning-canvas mapping
-│   │   │   ├── 02-world-sourcing.md       ▢  fixed catalogue + "propose one not on this list"
-│   │   │   ├── 03-fidelity-test.md        ▢  5-concept mapping test; breaking-point probes
-│   │   │   └── troubleshooting.md         ▢
-│   │   └── assets/world-brief-template.md ▢
+│   │   │   ├── 01-brief.md                ▣  4-question mini-brief; positioning-canvas mapping
+│   │   │   ├── 02-world-sourcing.md       ▣  fixed catalogue + "propose one not on this list"
+│   │   │   ├── 03-fidelity-test.md        ▣  5-concept mapping test; breaking-point probes
+│   │   │   └── troubleshooting.md         ▣
+│   │   └── assets/world-brief-template.md ▣
 │   │
 │   └── brand-name-generator/                       ── PHASE 2 ──
-│       ├── SKILL.md                       ▢  user-invoked. 3 steps. Ends by spawning blind QA.
+│       ├── SKILL.md                       ▣  user-invoked. 3 steps. Ends by spawning blind QA.
 │       ├── references/
-│       │   ├── 01-operators.md            ▢  compound, blend, affix, clip, respell, coinage…
-│       │   ├── 02-converge.md             ▢  cluster → shortlist → usage-in-a-sentence
-│       │   └── troubleshooting.md         ▢
-│       └── assets/shortlist-template.md   ▢
+│       │   ├── 01-operators.md            ▣  compound, blend, affix, clip, respell, coinage…
+│       │   ├── 02-converge.md             ▣  cluster → shortlist → usage-in-a-sentence
+│       │   └── troubleshooting.md         ▣
+│       └── assets/shortlist-template.md   ▣
 │
 └── shared/                                    ── built in Phase 1, used by all three ──
-    ├── name-types.md                      ▢  descriptive → suggestive → coined, mapped to TM tiers
-    ├── example-bank.md                    ▢  real names by type, industry, era
-    └── naming-decisions-log.md            ▢  the taste log (§5.6) — proposed / chosen / rejected
+    ├── name-types.md                      ▣  descriptive → suggestive → coined, mapped to TM tiers
+    ├── example-bank.md                    ▣  real names by type, industry, era
+    └── naming-decisions-log.md            ▣  the taste log (§5.6) — proposed / chosen / rejected
 ```
 
 Skills reach shared material through `${CLAUDE_PLUGIN_ROOT}/shared/<file>.md`. It sits *outside*
@@ -248,11 +248,12 @@ Built by **reverse-engineering**, per the PRD method note: the hand-written idea
 a fresh-context subagent runs the skill blind and the outputs are compared.
 
 **Exit criteria:**
-- [ ] `phonetics.py` returns stable output for the 20-name benchmark (Scout, Stripe, Notion, Xerox,
+- [x] `phonetics.py` returns stable output for the 20-name benchmark (Scout, Stripe, Notion, Xerox,
       Kodak, Zillow, Flickr, Palantir, Slack, Figma, Lingua + deliberately bad ones)
-- [ ] Determinism test passes: two runs byte-identical
-- [ ] g2p fallback error rate **measured** against held-out CMUdict and published in `scripts/README.md`
-      (this is PRD open question 2 — we answer it with a number, not a shrug)
+- [x] Determinism test passes: two runs byte-identical — verified, 80 tests green
+- [x] g2p fallback error rate **measured** against held-out CMUdict and published in
+      `scripts/README.md` — 32.8% exact phoneme match, 79.4% per-phoneme. PRD open question 2 is
+      answered with a number, not a shrug. See ADR-013.
 - [ ] Three context profiles produce visibly different verdicts on the same name
 - [ ] Leading words appear in the reasoning trace
 - [ ] Blind subagent output resembles the hand-written targets
