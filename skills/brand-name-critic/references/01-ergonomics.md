@@ -116,7 +116,7 @@ has two common spellings, so a measurable fraction of people who only hear the n
 | Signal in the JSON | Interpretation |
 |---|---|
 | `syllables.count` 1–2 | Optimal. 3 is fine. 4+ invites clipping — check `verbability.clippable_to` for what it will be clipped *to*, because that is the real name. |
-| `syllables.count: 0` | No vowel nucleus. Not a low score — the dimension has failed to apply. Fatal. |
+| `stress.shape: "no vowel nucleus"` | No syllable an English speaker can produce. The script still reports `syllables.count: 1` with an all-consonant structure so the array lengths stay consistent — **key on `stress.shape`, and on the matching entry in `warnings`, never on a count of 0.** Not a low score: the dimension has failed to apply. Fatal. |
 | `illegal_clusters` non-empty | Every entry is a place a reader will stumble, insert a vowel, or give up. Quote them. |
 | `sonority_violations` non-empty | Sonority must rise to the nucleus and fall after it. Violations produce reliable mispronunciation, not merely difficulty. |
 | `max_onset_length` > 3 | English permits three only in the strict /s/ + voiceless stop + liquid/glide template (*spr-*, *str-*, *skw-*). Anything else is illegal regardless of length. |
@@ -194,7 +194,26 @@ both open with X and both, letter by letter, map onto ordinary sounds — but Xe
 pronounceable two-syllable word wearing a rare letter, while Xzrq has no vowel and an illegal
 onset. Rare letters buy distinctiveness only when there is a sayable word underneath to attach
 them to. When `rare_letter_common_sound` is `false` **or** when it is `true` but
-`syllables.count` is 0 or `illegal_clusters` is non-empty, this is the finding to write.
+`stress.shape` is `"no vowel nucleus"` or `illegal_clusters` is non-empty, this is the finding
+to write.
+
+### When not to lead with `ergonomics_score`
+
+The score is an equal-weight mean of the six dimensions, and on a badly broken name the mean
+flatters it. *Blorbnth* scores 72 — higher than its pronounceability (54) and international
+robustness (36) would suggest — because it is genuinely unambiguous to spell (92) and genuinely
+distinctive (93). Both of those are true. Averaged, they bury the finding.
+
+So: if any of these hold, **lead with the dimension breakdown and report the mean second**,
+stating why.
+
+- `stress.shape` is `"no vowel nucleus"`
+- `phonotactics.illegal_clusters` is non-empty
+- any single dimension scores below 40
+- `pronunciation.confidence` is `low`
+
+This is `kill the composite` from §4.1 reappearing one layer down. The mean is a convenience for
+comparing *comfortable* names to each other; it is not a summary of a broken one.
 
 **Fatal vs cosmetic:** never fatal on its own; a low score is a *cost*, and how much it costs is
 set entirely by the profile. Under **venture** it is a headline concern. Under **feature** a low

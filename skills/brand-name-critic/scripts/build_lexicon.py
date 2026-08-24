@@ -169,6 +169,23 @@ def _levenshtein(a: Sequence[str], b: Sequence[str]) -> int:
     return prev[-1]
 
 
+def _score(sample: Sequence[Tuple[str, Tuple[str, ...]]]) -> Dict[str, float]:
+    exact = 0
+    edits = 0
+    ref_len = 0
+    for word, ref in sample:
+        hyp = list(phonetics.strip_stress_seq(phonetics.g2p(word)))
+        r = list(phonetics.strip_stress_seq(ref))
+        if hyp == r:
+            exact += 1
+        edits += _levenshtein(r, hyp)
+        ref_len += len(r)
+    n = max(1, len(sample))
+    return {"n": len(sample),
+            "exact": 100.0 * exact / n,
+            "per_phoneme": 100.0 * (1.0 - edits / float(max(1, ref_len)))}
+
+
 def measure_g2p(entries: Sequence[Tuple[str, Tuple[str, ...]]]) -> Dict[str, float]:
     """Hold out a seeded random sample and score the rule-based g2p on it."""
     rng = random.Random(G2P_SAMPLE_SEED)
@@ -196,7 +213,16 @@ def measure_g2p(entries: Sequence[Tuple[str, Tuple[str, ...]]]) -> Dict[str, flo
 
     n = len(sample)
     per = total_edits / float(total_ref)
+    short = _score([x for x in sample if len(x[0]) <= 6])
+    medium = _score([x for x in sample if 7 <= len(x[0]) <= 9])
+    long_ = _score([x for x in sample if len(x[0]) >= 10])
     return {
+        "short_n": short["n"], "short_exact": short["exact"],
+        "short_per_phoneme": short["per_phoneme"],
+        "medium_n": medium["n"], "medium_exact": medium["exact"],
+        "medium_per_phoneme": medium["per_phoneme"],
+        "long_n": long_["n"], "long_exact": long_["exact"],
+        "long_per_phoneme": long_["per_phoneme"],
         "sample_size": n,
         "seed": G2P_SAMPLE_SEED,
         "exact_match_no_stress": 100.0 * exact_nostress / n,
@@ -220,6 +246,14 @@ def print_measurement(m: Dict[str, float]) -> None:
         m["per_phoneme_accuracy"]))
     print("  phoneme error rate .............. {0:.1f}%".format(m["phoneme_error_rate"]))
     print("  correct phoneme count ........... {0:.1f}%".format(m["length_match"]))
+    print("")
+    print("  by word length (brand names live in the first row)")
+    print("    <=6 letters  n={0:<5.0f} exact {1:5.1f}%   per-phoneme {2:5.1f}%".format(
+        m["short_n"], m["short_exact"], m["short_per_phoneme"]))
+    print("    7-9 letters  n={0:<5.0f} exact {1:5.1f}%   per-phoneme {2:5.1f}%".format(
+        m["medium_n"], m["medium_exact"], m["medium_per_phoneme"]))
+    print("    10+ letters  n={0:<5.0f} exact {1:5.1f}%   per-phoneme {2:5.1f}%".format(
+        m["long_n"], m["long_exact"], m["long_per_phoneme"]))
 
 
 def main(argv=None) -> int:

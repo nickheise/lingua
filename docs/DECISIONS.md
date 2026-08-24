@@ -295,3 +295,70 @@ present an unverified claim as established fact, and prefer saying "uncertain" t
 confidence. A build that violated that rule while shipping a reference file about it would be
 incoherent. The blocklist's three-way split — debunked, verified, unverified — exists precisely
 so an unconfirmed claim has an honest place to live.
+
+---
+
+## ADR-013 — The g2p fallback is 33% accurate on unknown words, and the plugin says so
+
+**Date:** 2026-08-24 · **Status:** accepted · **Phase:** 1
+
+**Context.** PRD open question 2 asks: coined names are not in CMUdict, so a grapheme-to-phoneme
+fallback is needed, and it "introduces its own error rate. How much does that undermine the
+'deterministic' claim for Layer 1?" The PRD does not answer it. The build was instructed to
+measure rather than estimate.
+
+**Measured**, on a seeded held-out sample of 2,500 CMUdict words (`random.Random(20260824)`,
+reproducible via `build_lexicon.py --measure-g2p`):
+
+| Metric | Result |
+|---|---|
+| Exact phoneme-string match, stress ignored | **32.8%** |
+| Exact match, stress included | 24.2% |
+| Per-phoneme accuracy | **79.4%** |
+| ≤6 letters (the brand-name range) | 46.9% exact / 82.0% per-phoneme |
+| 10+ letters | 16.0% exact / 77.1% per-phoneme |
+
+**Decision.** Ship it, and make the uncertainty visible in the data rather than hiding it behind a
+number that looks measured. `pronunciation.source` distinguishes `cmudict` from `cmudict-compound`
+from `g2p`; `pronunciation.confidence` drops to `low`; a `warnings` entry says the transcription
+was inferred. `SKILL.md` step 2 requires checking confidence *before* any score, and
+`01-ergonomics.md` requires saying "estimate" rather than "measurement" in the critique.
+
+**The honest answer to the open question.** The *pipeline* is fully deterministic — same input,
+byte-identical output, no network, no clock, no randomness. The *transcription of an unknown word*
+is an estimate. Those are different claims, and conflating them is what would have undermined
+Layer 1. Eleven of the twenty benchmark names never touch g2p at all; for a real dictionary word
+the numbers are measurements, full stop.
+
+**A recorded negative result**, so nobody retries it: an unstressed-vowel-to-schwa reduction pass
+*lowered* exact match from 32.8% to 27.3% and broke Kodak and Xerox. Removed. The remaining
+ceiling is stress prediction, not more letter rules — that is where a future improvement would
+have to come from.
+
+---
+
+## ADR-014 — Do not lead with `ergonomics_score` on a broken name
+
+**Date:** 2026-08-24 · **Status:** accepted · **Phase:** 1
+
+**Context.** `ergonomics_score` is the equal-weight mean of six dimensions, as the contract
+requires. The phonetics engineer noticed that on a badly broken name the mean flatters it:
+*Blorbnth* scores **72**, well above its pronounceability (54) and international robustness (36),
+because it is genuinely unambiguous to spell (92) and genuinely distinctive (93). Both of those
+readings are correct. Averaged, they bury the finding.
+
+**Decision.** Keep the equal-weight mean — changing the weighting would make the score
+profile-dependent and break the contract. Instead add a presentation rule to
+`01-ergonomics.md`: when any of the following holds, **lead with the dimension breakdown and
+report the mean second, stating why.**
+
+- `stress.shape` is `"no vowel nucleus"`
+- `phonotactics.illegal_clusters` is non-empty
+- any single dimension scores below 40
+- `pronunciation.confidence` is `low`
+
+**Why.** This is §4.1's kill-the-composite argument reappearing one layer down. The PRD kills the
+*cross-layer* composite because it averages a fact with an opinion. The same failure occurs
+*within* Layer 1 whenever the six dimensions disagree violently: the mean is a convenience for
+comparing comfortable names to each other, not a summary of a broken one. Fixing it by
+presentation rather than by re-weighting keeps the number defensible and the reporting honest.

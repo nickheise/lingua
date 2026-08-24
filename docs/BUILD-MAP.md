@@ -163,7 +163,13 @@ Output — a single JSON object per name, keys stable, no key ever omitted:
     "codas": [["T"]]
   },
   "stress": { "pattern": "1", "primary_syllable": 0, "shape": "monosyllable" },
+  // A vowel-less name does NOT return syllables.count 0. It returns count 1 with an
+  // all-consonant structure and stress.shape "no vowel nucleus", so that
+  // count == len(structures) == len(onsets) == len(codas) always holds. Key on
+  // stress.shape and on `warnings`, never on a count of 0.
   "phonotactics": {
+    // arrays of OBJECTS, not strings. Each carries a ready-made `note` sentence the
+    // rubric can quote directly: {cluster, position, syllable, note}
     "illegal_clusters": [],         // clusters not attested in English onset/coda position
     "sonority_violations": [],
     "max_onset_length": 2,
@@ -176,7 +182,7 @@ Output — a single JSON object per name, keys stable, no key ever omitted:
                                        //   either maps to a rare sound OR maps to common sounds
                                        //   arranged into illegal syllables (see ADR-010). null =
                                        //   no rare letter present.
-    "ambiguous_graphemes": [],      // spellings with >1 common reading, e.g. "ough", "ea"
+    "ambiguous_graphemes": [],      // objects: {grapheme, positions, readings, note}
     "homophone_spellings": ["scowt","skout"]  // plausible misspellings from hearing it once
   },
   "neighborhood": {
@@ -186,7 +192,7 @@ Output — a single JSON object per name, keys stable, no key ever omitted:
     "coverage": "complete"          // complete | truncated (name longer than lexicon cutoff)
   },
   "international": {
-    "hard_phonemes": [],            // TH, R-L contrast, V/W, etc. — absent from major languages
+    "hard_phonemes": [],            // objects: test with h["phoneme"] == "TH", not `"TH" in list`
     "affected_languages": [],
     "risk": "low"                   // low | medium | high
   },
