@@ -172,7 +172,10 @@ Output — a single JSON object per name, keys stable, no key ever omitted:
   "orthography": {
     "letters": 5,
     "rare_letters": [],             // z q x j k present in the spelling
-    "rare_letter_common_sound": null,  // true = the Barton sweet spot; false = rare letter, rare sound
+    "rare_letter_common_sound": null,  // true = the Barton sweet spot. false = a rare letter that
+                                       //   either maps to a rare sound OR maps to common sounds
+                                       //   arranged into illegal syllables (see ADR-010). null =
+                                       //   no rare letter present.
     "ambiguous_graphemes": [],      // spellings with >1 common reading, e.g. "ough", "ea"
     "homophone_spellings": ["scowt","skout"]  // plausible misspellings from hearing it once
   },
