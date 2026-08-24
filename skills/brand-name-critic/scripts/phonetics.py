@@ -937,3 +937,559 @@ def get_lexicon() -> Lexicon:
             )
         _LEXICON = Lexicon(DATA_PATH)
     return _LEXICON
+
+
+# ===========================================================================
+# 4. Orthography
+# ===========================================================================
+
+RARE_LETTERS = ("j", "k", "q", "x", "z")
+
+# Phonemes that are *common in English*. The "rare letters, common sounds"
+# principle (PRD §3.3) is about paying no articulatory cost for orthographic
+# distinctiveness, so the bar is English frequency, not cross-linguistic
+# frequency — /ɜr/ is hard for a Spanish speaker but trivially common in
+# English, and Flickr is not penalised here for it.
+#
+# Excluded as genuinely low-frequency in English: /ʒ/ (measure, ~0.1%),
+# /ɔɪ/ (boy, ~0.2%), /ʊ/ (book, ~0.5%), /ð/ and /θ/ (frequent in function
+# words but marginal as a name's sound, and the source of the international
+# problem the same rubric flags separately).
+RARE_ENGLISH_PHONEMES = frozenset(["ZH", "OY", "UH", "TH", "DH"])
+COMMON_PHONEMES = frozenset(p for p in PHONEMES if p not in RARE_ENGLISH_PHONEMES)
+
+
+def _softener_at(letters: str, i: int, glen: int) -> bool:
+    nxt = letters[i + glen:i + glen + 1]
+    return nxt in ("e", "i", "y")
+
+
+# (grapheme, condition(letters, index) or None, [readings], note)
+AMBIGUOUS_TABLE: List[Tuple[str, object, List[str], str]] = [
+    ("ough", None, ["/uː/ through", "/oʊ/ though", "/ʌf/ rough", "/ɒf/ cough", "/aʊ/ bough"],
+     "the worst grapheme in English: five common readings"),
+    ("augh", None, ["/ɔː/ caught", "/æf/ laugh"], "two common readings"),
+    ("eigh", None, ["/eɪ/ eight", "/aɪ/ height"], "two common readings"),
+    ("ea", None, ["/iː/ bead", "/ɛ/ bread", "/eɪ/ break"], "three common readings"),
+    ("ie", None, ["/iː/ piece", "/aɪ/ pie", "/ɛ/ friend"], "three common readings"),
+    ("ei", None, ["/iː/ receive", "/eɪ/ vein", "/aɪ/ height"], "three common readings"),
+    ("oo", None, ["/uː/ food", "/ʊ/ book", "/ʌ/ blood"], "three common readings"),
+    ("ou", None, ["/aʊ/ out", "/uː/ soup", "/ʌ/ tough", "/ɔː/ four"], "four common readings"),
+    ("ow", None, ["/aʊ/ cow", "/oʊ/ low"], "two common readings, not predictable from position"),
+    ("ai", None, ["/eɪ/ rain", "/ɛ/ said"], "two readings"),
+    ("ay", None, ["/eɪ/ day", "/ɛ/ says"], "two readings"),
+    ("au", None, ["/ɔː/ caught", "/æ/ laugh"], "two readings"),
+    ("ch", None, ["/tʃ/ church", "/k/ chorus", "/ʃ/ machine"], "three common readings"),
+    ("gh", None, ["/ɡ/ ghost", "/f/ laugh", "silent (night)"], "three readings including silence"),
+    ("ph", None, ["/f/ phone", "/p-h/ shepherd"], "usually /f/, but a coined name invites doubt"),
+    ("ti", lambda s, i: s[i + 2:i + 3] in ("o", "a"), ["/ʃ/ nation", "/t-i/ tie"],
+     "<ti> before a vowel is usually /ʃ/, which is not obvious"),
+    ("ci", lambda s, i: s[i + 2:i + 3] in ("o", "a"), ["/ʃ/ special", "/s-i/ city"],
+     "<ci> before a vowel is usually /ʃ/"),
+    ("si", lambda s, i: s[i + 2:i + 3] in ("o", "a"), ["/ʒ/ vision", "/ʃ/ mansion"],
+     "<si> before a vowel is /ʒ/ or /ʃ/"),
+    ("kn", lambda s, i: i == 0, ["/n/ knee (silent k)"], "silent initial letter"),
+    ("gn", lambda s, i: i == 0, ["/n/ gnome (silent g)"], "silent initial letter"),
+    ("wr", lambda s, i: i == 0, ["/r/ wrist (silent w)"], "silent initial letter"),
+    ("ps", lambda s, i: i == 0, ["/s/ psalm (silent p)"], "silent initial letter"),
+    ("mb", lambda s, i: i + 2 == len(s), ["/m/ climb (silent b)"], "silent final letter"),
+    ("mn", lambda s, i: i + 2 == len(s), ["/m/ column (silent n)"], "silent final letter"),
+    ("c", lambda s, i: _softener_at(s, i, 1), ["/s/ cent", "/k/ Celt"],
+     "<c> before e/i/y is normally soft, but the hard reading survives in names"),
+    ("g", lambda s, i: _softener_at(s, i, 1), ["/dʒ/ gem", "/ɡ/ get"],
+     "<g> before e/i/y is genuinely unpredictable: gem vs get, giant vs gift"),
+    ("x", None, ["/ks/ box", "/z/ Xerox", "/ɡz/ exam"],
+     "three readings; initial <x> is /z/, medial is /ks/"),
+    ("q", lambda s, i: s[i + 1:i + 2] != "u", ["no settled English reading"],
+     "<q> not followed by <u> has no conventional English value"),
+    ("y", lambda s, i: 0 < i, ["/aɪ/ my", "/i/ happy", "/ɪ/ gym", "/j/ canyon"],
+     "<y> away from word-initial position has four readings"),
+]
+
+
+def ambiguous_graphemes(letters: str) -> List[Dict[str, object]]:
+    """Spellings with more than one common English reading.
+
+    Driven by AMBIGUOUS_TABLE above — an explicit, arguable inventory, not a
+    heuristic. Occurrences of the same grapheme collapse into one entry with a
+    list of positions, so a word is not penalised twice for the same problem.
+    """
+    found: Dict[str, Dict[str, object]] = {}
+    order: List[str] = []
+    n = len(letters)
+    i = 0
+    while i < n:
+        for graph, cond, readings, note in AMBIGUOUS_TABLE:
+            g = len(graph)
+            if letters[i:i + g] != graph:
+                continue
+            if cond is not None and not cond(letters, i):
+                continue
+            if graph not in found:
+                found[graph] = {"grapheme": graph, "positions": [], "readings": list(readings),
+                                "note": note}
+                order.append(graph)
+            found[graph]["positions"].append(i)  # type: ignore[index]
+            i += g - 1
+            break
+        i += 1
+    return [found[g] for g in order]
+
+
+# Phoneme -> alternate spellings. Used to generate plausible misspellings of a
+# name heard once. Keys are the phoneme sequence of one grapheme segment, so
+# multi-phoneme graphemes like <x> = /ks/ are covered.
+SPELLINGS: Dict[str, List[str]] = {
+    "AA": ["o", "a", "ah", "au"],
+    "AE": ["a", "ah"],
+    "AH": ["a", "u", "o", "e", "ah"],
+    "AO": ["aw", "au", "o", "ough"],
+    "AW": ["ou", "ow"],
+    "AY": ["i", "y", "ie", "igh", "ye"],
+    "EH": ["e", "ea", "ai"],
+    "ER": ["er", "ur", "ir", "or", "ar", "yr"],
+    "EY": ["a", "ai", "ay", "ei", "ey", "eigh"],
+    "IH": ["i", "y", "e"],
+    "IY": ["ee", "ea", "e", "ie", "y", "i"],
+    "OW": ["o", "oa", "ow", "oe"],
+    "OY": ["oi", "oy"],
+    "UH": ["oo", "u"],
+    "UW": ["oo", "u", "ue", "ew", "ou"],
+    "B": ["b", "bb"], "CH": ["ch", "tch"], "D": ["d", "dd"],
+    "DH": ["th"], "F": ["f", "ph", "ff"], "G": ["g", "gg", "gh"],
+    "HH": ["h", "wh"], "JH": ["j", "g", "dg", "ge"],
+    "K": ["k", "c", "ck", "q", "ch"], "L": ["l", "ll"],
+    "M": ["m", "mm"], "N": ["n", "nn", "kn", "gn"],
+    "NG": ["ng", "n"], "P": ["p", "pp"], "R": ["r", "rr", "wr"],
+    "S": ["s", "ss", "c", "sc", "ce"], "SH": ["sh", "ti", "ci", "ch"],
+    "T": ["t", "tt"], "TH": ["th"], "V": ["v", "vv"],
+    "W": ["w", "wh"], "Y": ["y", "i"], "Z": ["z", "s", "zz", "x"],
+    "ZH": ["si", "ge", "s"],
+    "K S": ["x", "cks", "ks", "cs"],
+    "NG G": ["ng", "ngu"],
+    "K W": ["qu", "kw", "cw"],
+    "Y UW": ["u", "ew", "ue", "eu"],
+}
+
+MAX_HOMOPHONES = 8
+
+
+def homophone_spellings(tokens: Sequence[str]) -> List[str]:
+    """Plausible misspellings someone would produce hearing the name once.
+
+    Method: segment the spelling into graphemes with the g2p aligner, then for
+    each segment substitute the alternate spellings SPELLINGS lists for that
+    segment's phonemes. A candidate is kept only if the g2p engine reads it back
+    as the *same* phoneme string as the name itself — so "Linguo" is rejected
+    (it reads /lɪŋɡwoʊ/) while "Lyngua" is kept. That verification step is what
+    stops the list filling with letter salad; its accuracy is bounded by the
+    g2p engine's, which is documented in README.md.
+    """
+    target = tuple(strip_stress_seq(sum((g2p(t) for t in tokens), [])))
+    if not target:
+        return []
+    seg_lists = [g2p_align(t) for t in tokens]
+    candidates: Set[str] = set()
+
+    for ti, segs in enumerate(seg_lists):
+        for si, (graph, phones) in enumerate(segs):
+            if not phones:
+                continue
+            for alt in SPELLINGS.get(" ".join(phones), ()):
+                if alt == graph:
+                    continue
+                new_tok = "".join(
+                    alt if k == si else g for k, (g, _) in enumerate(segs)
+                )
+                if new_tok == tokens[ti] or len(new_tok) < 2:
+                    continue
+                if new_tok[:2] in ("bb", "dd", "ff", "gg", "ll", "mm", "nn",
+                                   "pp", "rr", "ss", "tt", "zz", "vv", "cc"):
+                    continue      # English words do not begin with a geminate
+                cand = list(tokens)
+                cand[ti] = new_tok
+                candidates.add(" ".join(cand))
+
+    keep: List[str] = []
+    original = " ".join(tokens)
+    for cand in sorted(candidates):
+        if cand == original:
+            continue
+        toks = cand.split(" ")
+        read = tuple(strip_stress_seq(sum((g2p(t) for t in toks), [])))
+        if read == target:
+            keep.append(cand)
+    return keep[:MAX_HOMOPHONES]
+
+
+def rare_letter_common_sound(letters: str, phones: Sequence[str],
+                             phonotactics: Dict[str, object],
+                             has_nucleus: bool) -> Optional[bool]:
+    """The `rare letters, common sounds` test (PRD §3.3).
+
+    None  — no rare letter in the spelling; the test does not apply.
+    True  — a rare letter (z q x j k) sits on top of sounds that are all common
+            in English, in a phonotactically legal word. This is the Barton
+            sweet spot: Xerox, Zillow, Kodak, Coke.
+    False — the rare letter buys distinctiveness by spending articulation: a
+            phoneme outside the common English set, or a cluster English does
+            not license, or no vowel at all. This is Xzrq.
+    """
+    present = [c for c in RARE_LETTERS if c in letters]
+    if not present:
+        return None
+    if not has_nucleus:
+        return False
+    if phonotactics["illegal_clusters"] or phonotactics["sonority_violations"]:
+        return False
+    for p in phones:
+        if strip_stress(p) not in COMMON_PHONEMES:
+            return False
+    return True
+
+
+# ===========================================================================
+# 5. International robustness
+# ===========================================================================
+#
+# Phonemes absent from, or hard in, major world languages. Weights reflect how
+# widely the difficulty is shared, and drive the low/medium/high band.
+
+HARD_PHONEMES: Dict[str, Dict[str, object]] = {
+    "TH": {"label": "/θ/", "weight": 2,
+           "languages": ["French", "German", "Spanish (most dialects)", "Italian",
+                         "Portuguese", "Russian", "Mandarin", "Japanese", "Korean", "Hindi"],
+           "note": "rare outside English; usually substituted with /t/, /s/ or /f/"},
+    "DH": {"label": "/ð/", "weight": 2,
+           "languages": ["French", "German", "Italian", "Portuguese", "Russian",
+                         "Mandarin", "Japanese", "Korean", "Hindi"],
+           "note": "rare outside English; usually substituted with /d/ or /z/"},
+    "AE": {"label": "/æ/", "weight": 1,
+           "languages": ["Spanish", "Italian", "Portuguese", "Russian", "Mandarin", "Japanese"],
+           "note": "merges with /a/ or /ɛ/ for most non-English speakers"},
+    "ER": {"label": "/ɜr/", "weight": 1,
+           "languages": ["French", "German", "Spanish", "Italian", "Japanese", "Korean"],
+           "note": "the English r-coloured vowel has no close equivalent in most languages"},
+    "ZH": {"label": "/ʒ/", "weight": 2,
+           "languages": ["Spanish", "German", "Mandarin", "Japanese", "Korean", "Hindi"],
+           "note": "absent from many inventories; substituted with /ʃ/, /z/ or /dʒ/"},
+    "OY": {"label": "/ɔɪ/", "weight": 1,
+           "languages": ["Mandarin", "Japanese", "Korean"],
+           "note": "a marginal diphthong outside European languages"},
+}
+
+RL_CONTRAST_LANGUAGES = ["Japanese", "Korean"]
+VW_CONTRAST_LANGUAGES = ["Hindi", "German", "Japanese", "Korean"]
+INITIAL_NG_LANGUAGES = ["English-adjacent European languages generally",
+                        "French", "German", "Spanish", "Italian", "Russian"]
+
+
+def international_profile(phones: Sequence[str], sylls: List[Syllable]) -> Dict[str, object]:
+    base = [strip_stress(p) for p in phones]
+    present = set(base)
+    hard: List[Dict[str, object]] = []
+    languages: Set[str] = set()
+    weight = 0
+
+    for ph in ("TH", "DH", "AE", "ER", "ZH", "OY"):
+        if ph in present:
+            spec = HARD_PHONEMES[ph]
+            hard.append({"phoneme": ph, "ipa": spec["label"], "note": spec["note"]})
+            languages.update(spec["languages"])  # type: ignore[arg-type]
+            weight += int(spec["weight"])  # type: ignore[arg-type]
+
+    # the /r/–/l/ contrast is a problem only when both are present in one word
+    rhotic = ("R" in present) or ("ER" in present)
+    if rhotic and "L" in present:
+        hard.append({"phoneme": "R+L", "ipa": "/r/–/l/",
+                     "note": "the name contains both /r/ and /l/; the contrast is not "
+                             "phonemic in Japanese or Korean"})
+        languages.update(RL_CONTRAST_LANGUAGES)
+        weight += 1
+    if "V" in present and "W" in present:
+        hard.append({"phoneme": "V+W", "ipa": "/v/–/w/",
+                     "note": "the name contains both /v/ and /w/; the contrast is absent "
+                             "or unstable in Hindi and German"})
+        languages.update(VW_CONTRAST_LANGUAGES)
+        weight += 1
+    if sylls and sylls[0].onset and strip_stress(sylls[0].onset[0]) == "NG":
+        hard.append({"phoneme": "NG-initial", "ipa": "/ŋ/ word-initially",
+                     "note": "/ŋ/ cannot begin a word in English or in most European languages"})
+        languages.update(INITIAL_NG_LANGUAGES)
+        weight += 2
+
+    risk = "low" if weight == 0 else ("medium" if weight <= 2 else "high")
+    return {
+        "hard_phonemes": hard,
+        "affected_languages": sorted(languages),
+        "risk": risk,
+        "_weight": weight,
+    }
+
+
+# ===========================================================================
+# 6. Verbability
+# ===========================================================================
+
+_NO_DOUBLE = frozenset("wxy")
+
+
+def clip_candidates(letters: str) -> List[str]:
+    """Shorter forms that stay pronounceable.
+
+    English clipping cuts at the first syllable boundary (Palantir -> Pal,
+    Lingua -> Ling), so both the maximal-onset cut and the "closed" variant that
+    pulls the next consonant back into the coda are offered. A candidate is kept
+    only if it is at least three letters and its own phonotactics are clean.
+    """
+    segs = g2p_align(letters)
+    phones: List[str] = []
+    owner: List[int] = []
+    for si, (_, ph) in enumerate(segs):
+        for x in ph:
+            phones.append(x)
+            owner.append(si)
+    if not phones:
+        return []
+    stressed = _assign_stress(phones, letters)
+    sylls = syllabify(stressed)
+    if len(sylls) < 2:
+        return []
+    cut = len(sylls[0].onset) + (1 if sylls[0].nucleus else 0) + len(sylls[0].coda)
+    out: List[str] = []
+    for b in (cut, cut + 1):
+        if b <= 0 or b >= len(phones):
+            continue
+        clip = "".join(g for g, _ in segs[:owner[b - 1] + 1])
+        if len(clip) < 3 or len(clip) >= len(letters):
+            continue
+        csyl = syllabify(_assign_stress(phones[:b], clip))
+        if not csyl or csyl[0].nucleus is None:
+            continue
+        pt = check_phonotactics(csyl)
+        if pt["illegal_clusters"] or pt["sonority_violations"]:
+            continue
+        out.append(clip)
+    return sorted(set(out))
+
+
+def agentive_form(letters: str, syllable_count: int) -> str:
+    """Regular English agentive derivation, spelled out so it is auditable.
+
+    -e      -> +r        (Stripe -> striper)
+    -y      -> -y +ier   (Notify -> notifier)
+    CVC     -> double the final consonant, monosyllables only (Scan -> scanner)
+    else    -> +er       (Scout -> scouter, Slack -> slacker)
+    """
+    w = letters
+    if not w:
+        return ""
+    if w.endswith("e"):
+        return w + "r"
+    if w.endswith("y") and len(w) > 2 and w[-2] not in "aeiou":
+        return w[:-1] + "ier"
+    if (syllable_count == 1 and len(w) >= 3
+            and w[-1] not in "aeiou" and w[-1] not in _NO_DOUBLE
+            and w[-2] in "aeiou" and w[-3] not in "aeiou"):
+        return w + w[-1] + "er"
+    return w + "er"
+
+
+# ===========================================================================
+# 7. The six dimensions
+#
+# Every score is 100 minus documented penalties (or a documented base plus
+# documented adjustments), clamped to 0-100. There are no free parameters that
+# are not written down in README.md alongside their justification.
+# ===========================================================================
+
+
+def _clamp(x: float) -> int:
+    return int(max(0, min(100, round(x))))
+
+
+def _dimensions(ctx: Dict[str, object]) -> Dict[str, Dict[str, object]]:
+    sylls: List[Syllable] = ctx["syllables"]          # type: ignore[assignment]
+    pt: Dict[str, object] = ctx["phonotactics"]        # type: ignore[assignment]
+    n_syl = len(sylls)
+    has_nucleus = bool(ctx["has_nucleus"])
+    illegal = pt["illegal_clusters"]
+    sonority = pt["sonority_violations"]
+    clusters2 = sum(1 for s in sylls if len(s.onset) >= 2) + \
+        sum(1 for s in sylls if len(s.coda) >= 2)
+    clusters3 = sum(1 for s in sylls if len(s.onset) >= 3) + \
+        sum(1 for s in sylls if len(s.coda) >= 3)
+    longest_cluster = max([0] + [len(s.onset) for s in sylls] + [len(s.coda) for s in sylls])
+
+    # -- 1. pronounceability ----------------------------------------------
+    score = 100.0
+    ev: List[str] = []
+    syl_pen = {0: 0, 1: 0, 2: 0, 3: 6, 4: 14}.get(n_syl, 22)
+    score -= syl_pen
+    ev.append("{0} syllable{1}".format(n_syl, "" if n_syl == 1 else "s")
+              + ("" if syl_pen == 0 else " (-{0})".format(syl_pen)))
+    if not has_nucleus:
+        score -= 40
+        ev.append("no vowel nucleus — cannot be produced as a syllable (-40)")
+    if illegal:
+        pen = min(45, 18 * len(illegal))
+        score -= pen
+        ev.append("{0} illegal cluster{1}: {2} (-{3})".format(
+            len(illegal), "" if len(illegal) == 1 else "s",
+            ", ".join(sorted({_fmt(c["cluster"]) for c in illegal})), pen))
+    else:
+        ev.append("all clusters attested in English")
+    if sonority:
+        pen = min(30, 12 * len(sonority))
+        score -= pen
+        ev.append("{0} sonority violation{1}: {2} (-{3})".format(
+            len(sonority), "" if len(sonority) == 1 else "s",
+            ", ".join(sorted({_fmt(c["cluster"]) for c in sonority})), pen))
+    else:
+        ev.append("no sonority violation")
+    if clusters2:
+        score -= 4 * clusters2
+        ev.append("{0} consonant cluster{1} (-{2})".format(
+            clusters2, "" if clusters2 == 1 else "s", 4 * clusters2))
+    over = max(0, longest_cluster - 3)
+    if over:
+        score -= 5 * over
+        ev.append("longest cluster is {0} consonants (-{1})".format(longest_cluster, 5 * over))
+    pronounceability = {"score": _clamp(score), "evidence": ev}
+
+    # -- 2. spellability ---------------------------------------------------
+    amb: List[Dict[str, object]] = ctx["ambiguous"]        # type: ignore[assignment]
+    homo: List[str] = ctx["homophones"]                     # type: ignore[assignment]
+    rlcs = ctx["rare_letter_common_sound"]
+    letters: str = ctx["letters_only"]                      # type: ignore[assignment]
+    score = 100.0
+    ev = []
+    if amb:
+        pen = 10 * min(len(amb), 4)
+        score -= pen
+        ev.append("{0} ambiguous grapheme{1}: {2} (-{3})".format(
+            len(amb), "" if len(amb) == 1 else "s",
+            ", ".join("<{0}>".format(a["grapheme"]) for a in amb), pen))
+    else:
+        ev.append("no ambiguous graphemes")
+    if homo:
+        pen = 6 * min(len(homo), 5)
+        score -= pen
+        ev.append("{0} plausible misspelling{1} from hearing it once: {2} (-{3})".format(
+            len(homo), "" if len(homo) == 1 else "s", ", ".join(homo[:4]), pen))
+    else:
+        ev.append("no plausible alternate spelling generated")
+    if rlcs is False:
+        score -= 10
+        ev.append("rare letter on a rare or illegal sound (-10)")
+    if not any(c in "aeiouy" for c in letters):
+        score -= 25
+        ev.append("no vowel letter — cannot be spelled from hearing it (-25)")
+    spellability = {"score": _clamp(score), "evidence": ev}
+
+    # -- 3. distinctiveness ------------------------------------------------
+    percentile = int(ctx["percentile"])                      # type: ignore[arg-type]
+    density = int(ctx["density"])                            # type: ignore[arg-type]
+    rare = list(ctx["rare_letters"])                         # type: ignore[arg-type]
+    score = 100.0 - 0.6 * percentile
+    ev = ["neighbourhood density {0} ({1}th percentile of the lexicon)".format(
+        density, percentile)]
+    if rlcs is True:
+        score += 12
+        ev.append("rare letters, common sounds: <{0}> on common English phonemes (+12)".format(
+            ">, <".join(rare)))
+    elif rlcs is False:
+        ev.append("rare letters <{0}>, but not on common sounds — no bonus".format(
+            ">, <".join(rare)))
+    else:
+        ev.append("no rare letters (z q x j k)")
+    distinctiveness = {"score": _clamp(score), "evidence": ev}
+
+    # -- 4. rhythm & recall -------------------------------------------------
+    stress: Dict[str, object] = ctx["stress"]               # type: ignore[assignment]
+    ev = []
+    if not has_nucleus:
+        score = 20.0
+        ev.append("no vowel nucleus — there is no rhythm to reproduce")
+    else:
+        base = {1: 90.0, 2: 100.0, 3: 88.0, 4: 74.0}.get(n_syl, 60.0)
+        score = base
+        ev.append({1: "monosyllable — maximally reproducible",
+                   2: "two syllables — the most reproducible length in English"}.get(
+            n_syl, "{0} syllables".format(n_syl)) + " (base {0:.0f})".format(base))
+        shape = str(stress["shape"])
+        if "1" not in str(stress["pattern"]):
+            score -= 10
+            ev.append("no primary stress located (-10)")
+        else:
+            ev.append("stress {0}: {1}".format(stress["pattern"], shape))
+        if n_syl == 3 and shape.startswith("dactyl"):
+            score += 4
+            ev.append("dactylic — the strongest three-syllable pattern (+4)")
+    if illegal:
+        pen = min(15, 5 * len(illegal))
+        score -= pen
+        ev.append("illegal clusters make it hard to repeat back (-{0})".format(pen))
+    if len(letters) > 10:
+        score -= 6
+        ev.append("{0} letters — long for recall (-6)".format(len(letters)))
+    rhythm = {"score": _clamp(score), "evidence": ev}
+
+    # -- 5. verbability -----------------------------------------------------
+    clips: List[str] = ctx["clips"]                          # type: ignore[assignment]
+    ends_vowel = bool(ctx["ends_in_vowel"])
+    in_lexicon = bool(ctx["in_lexicon"])
+    base = {1: 90.0, 2: 75.0, 3: 55.0}.get(n_syl, 35.0)
+    score = base
+    ev = ["{0} syllable{1} (base {2:.0f})".format(n_syl, "" if n_syl == 1 else "s", base)]
+    if not has_nucleus:
+        score -= 50
+        ev.append("no vowel nucleus — cannot be inflected (-50)")
+    if in_lexicon:
+        score += 5
+        ev.append("already an English word — inflects without explanation (+5)")
+    if clips:
+        score += 5
+        ev.append("clips to {0} (+5)".format(", ".join(clips)))
+    if ends_vowel:
+        score -= 5
+        ev.append("ends in a vowel — awkward to inflect (-5)")
+    if illegal:
+        score -= 10
+        ev.append("illegal clusters block clean inflection (-10)")
+    verbability = {"score": _clamp(score), "evidence": ev}
+
+    # -- 6. international robustness ----------------------------------------
+    intl: Dict[str, object] = ctx["international"]           # type: ignore[assignment]
+    weight = int(intl["_weight"])                            # type: ignore[arg-type]
+    hard = intl["hard_phonemes"]
+    score = 100.0 - 12 * weight - 4 * clusters2 - 8 * clusters3
+    ev = []
+    if hard:
+        ev.append("hard phonemes: {0} (-{1})".format(
+            ", ".join(str(h["ipa"]) for h in hard), 12 * weight))  # type: ignore[index]
+    else:
+        ev.append("no phonemes outside the cross-linguistically common core")
+    if clusters2:
+        ev.append("{0} consonant cluster{1} — costly for CV-syllable languages (-{2})".format(
+            clusters2, "" if clusters2 == 1 else "s", 4 * clusters2 + 8 * clusters3))
+    if longest_cluster > 2:
+        score -= 6 * (longest_cluster - 2)
+        ev.append("longest cluster {0} consonants (-{1})".format(
+            longest_cluster, 6 * (longest_cluster - 2)))
+    if not has_nucleus:
+        score -= 20
+        ev.append("no vowel nucleus (-20)")
+    if len(letters) > 10:
+        score -= 6
+        ev.append("{0} letters (-6)".format(len(letters)))
+    international = {"score": _clamp(score), "evidence": ev}
+
+    return {
+        "pronounceability": pronounceability,
+        "spellability": spellability,
+        "distinctiveness": distinctiveness,
+        "rhythm_recall": rhythm,
+        "verbability": verbability,
+        "international_robustness": international,
+    }
