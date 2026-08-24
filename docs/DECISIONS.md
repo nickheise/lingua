@@ -362,3 +362,44 @@ report the mean second, stating why.**
 *within* Layer 1 whenever the six dimensions disagree violently: the mean is a convenience for
 comparing comfortable names to each other, not a summary of a broken one. Fixing it by
 presentation rather than by re-weighting keeps the number defensible and the reporting honest.
+
+---
+
+## ADR-015 — Lingua reads the positioning canvas; it never contains positioning
+
+**Date:** 2026-08-24 · **Status:** accepted · **Phase:** 3
+
+**Context.** The `brand-*` positioning suite became available mid-build. It is five skills, each
+carrying a byte-identical 5,462-word `framework.md` — 27,310 words total, of which 21,848 are pure
+duplication. That is the exact DRY failure PRD §5.3 cites as the reason `_shared/` exists.
+
+The open question: should Lingua absorb any positioning material, so a naming run works without
+the suite present?
+
+**Decision.** No. Lingua depends on the canvas as an **interface**, not on positioning as
+**content**. What Lingua owns is the *mapping* — which canvas sections feed which brief fields —
+and nothing else. Not the framework, not the ten steps, not the canvas template.
+
+**Why.** Copying any part of a 5,462-word framework into Lingua would reproduce the disease
+verbatim: six copies instead of five, drifting the moment Dunford's framework gets an edit. And
+the dependency is genuinely thin — PRD §6.3 is right that the naming brief is a *subset* of the
+canvas. A subset is read, not copied.
+
+**What this decision actually caught.** Lingua's canvas reader was mapping a field called
+**"Differentiated value"**, which does not exist on the canvas. The real sections are Market
+category, Competitive alternatives, **Unique capabilities**, **Value themes**, Best-fit customers,
+and Relevant trends. Dunford's chain runs capabilities → value themes; "differentiated value" is
+the PRD's paraphrase, written from memory of the canvas rather than from the canvas. Lingua would
+have looked for a heading that was never there and silently fallen through to Path B.
+
+Fixed by mapping against the literal section headings, and the correction paid for itself twice:
+
+- **Unique capabilities** turns out to be the most valuable section for naming and was not mapped
+  at all. It is a list of the product's real concepts — exactly the input the five-concept
+  fidelity test needs, and strictly better than concepts the agent would invent.
+- **Relevant trends** feeds the eras section of the example bank, catching a world that sounds
+  like 2011.
+
+**Standing rule.** When the canvas schema changes, this mapping changes with it. It is the only
+coupling point, which is what makes it cheap to maintain — and the reason to keep it to one table
+in one file rather than letting canvas assumptions spread through the skills.

@@ -6,14 +6,20 @@ Two paths in. Take whichever applies — never ask for both.
 
 Auto-populate from it. Ask nothing. Map these canvas fields directly into the brief fields below:
 
-| Canvas field | Brief field | Why it matters here |
-|---|---|---|
-| Best-fit customer | Who for | Sets the register a world's vocabulary needs to land with |
-| Market category | What it does | The functional shape the metaphor has to map onto |
-| Differentiated value | One-word personality (inferred) | The angle a world should sharpen, not flatten |
-| Competitive alternatives | What it's replacing | **Especially valuable** — see below |
+These are the **actual section headings** of the positioning canvas, not paraphrases. Match on
+them literally; if a heading is missing, treat that field as absent rather than guessing which
+nearby section meant it.
 
-**Competitive alternatives are worth more than the other three fields combined for this
+| Canvas section | Brief field | Why it matters here |
+|---|---|---|
+| **Best-fit customers** | Who for | Sets the register a world's vocabulary needs to land with |
+| **Market category** | What it does | The functional shape the metaphor has to map onto |
+| **Unique capabilities** | What it does (specifics) | The concrete things the metaphor must be able to name. Feed these straight into the five-concept fidelity test in Step 3 — they are the real product concepts, so they beat any you would invent. |
+| **Value themes** | One-word personality (inferred) | The angle a world should sharpen, not flatten. Dunford's chain runs capabilities → value themes, so infer personality from the themes, not from the capability list. |
+| **Competitive alternatives** | What it's replacing | **Especially valuable** — see below |
+| **Relevant trends** (optional) | Era check | If present, use it against the eras section of `${CLAUDE_PLUGIN_ROOT}/shared/example-bank.md` — a world that sounds like 2011 dates the product before it ships. |
+
+**Competitive alternatives are worth more than the other fields combined for this
 purpose.** They define the phonetic and semantic white space to avoid — if three competitors
 already lean nautical, a fourth nautical world isn't distinctive, it's confirmation. Read the
 alternatives list before proposing worlds in Step 2, not after.
