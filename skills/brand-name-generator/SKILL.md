@@ -46,7 +46,7 @@ The generator does not grade its own output — an agent evaluating work it just
 fewer flaws in it, because it still holds the reasons for each choice. So before the shortlist is
 presented, it gets an independent read.
 
-Spawn a **fresh-context subagent** (Task tool, general-purpose) whose entire prompt is:
+Spawn a **fresh-context subagent** (the Agent/Task tool, `general-purpose` type) whose entire prompt is:
 
 - the surfaced candidate names, **alphabetized** — never in generation order, never annotated
   with a favorite
