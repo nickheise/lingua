@@ -250,6 +250,19 @@ phonetic personality against the *positioning's* personality, and it is unanswer
 knowing the positioning. If no positioning is available, say that, and either ask one question or
 skip the criterion. **Do not invent a positioning in order to have something to compare against.**
 
+**Expect to be missing the positioning — this skill's own trigger case is a bare name floated
+mid-conversation.** So make asking the default rather than the exception, and make it one
+question, not a brief:
+
+> *In one or two adjectives, what should this feel like to the person using it?*
+
+That is cheap enough to ask in a critique that is otherwise non-interactive, and it converts the
+criterion from structurally dead into a real tie-breaker. If the user does not answer, or the
+critique is running unattended (a blind QA pass from `brand-name-generator`, for instance), report
+**"not assessable — no positioning available"** and move on. That is a clean pass, not a hole:
+this criterion is a tie-breaker, so an unanswered one changes no recommendation. Say so explicitly
+rather than leaving a reader to wonder whether the step was skipped or failed.
+
 **Procedure.**
 
 1. Read the name's phonetic character from the Layer 1 JSON: onset type, vowel quality, coda,

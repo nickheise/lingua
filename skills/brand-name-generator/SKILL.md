@@ -13,6 +13,12 @@ world into a clustered shortlist ready for critique. It does not build worlds.
 — don't improvise a world here. Take the world's name, its vocabulary, and its
 `breadth × fidelity` evidence as given input.
 
+> **Resolving `${CLAUDE_PLUGIN_ROOT}`.** When this plugin is installed, the variable is
+> substituted for you. When it is not — a bare checkout, a subagent, a sandbox — it is empty, and
+> a literal expansion produces a broken path. In that case resolve it to the plugin root: the
+> directory containing `skills/` and `shared/`, two levels above this skill's own directory.
+> Never silently skip a file because the path did not expand.
+
 ## Step 1 — Diverge
 
 ~80–100 candidates inside the chosen world, worked through the construction operators — **not a

@@ -12,6 +12,12 @@ Three layers, three shapes of verdict: a measurement, an argument, a fact sheet.
 Output shape: `assets/critique-template.md`. Worked targets:
 `docs/reference-critiques/`.
 
+> **Resolving `${CLAUDE_PLUGIN_ROOT}`.** When this plugin is installed, the variable is
+> substituted for you. When it is not — a bare checkout, a subagent, a sandbox — it is empty, and
+> a literal expansion produces a broken path. In that case resolve it to the plugin root: the
+> directory containing `skills/` and `shared/`, two levels above this skill's own directory.
+> Never silently skip a file because the path did not expand.
+
 ## Step 1 — Establish the profile
 
 Ask, or infer and state the inference: **venture/product**, **feature/UI**, or **internal

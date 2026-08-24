@@ -13,6 +13,12 @@ that vocabulary from, and proving it holds up before anyone gets attached to a w
 **This skill terminates at a chosen world. It does not produce names.** That boundary is not a
 formality — see the guard in Step 4.
 
+> **Resolving `${CLAUDE_PLUGIN_ROOT}`.** When this plugin is installed, the variable is
+> substituted for you. When it is not — a bare checkout, a subagent, a sandbox — it is empty, and
+> a literal expansion produces a broken path. In that case resolve it to the plugin root: the
+> directory containing `skills/` and `shared/`, two levels above this skill's own directory.
+> Never silently skip a file because the path did not expand.
+
 ## Step 1 — Load the brief
 
 Check for an existing positioning canvas. If one exists, auto-populate from it and ask nothing.
