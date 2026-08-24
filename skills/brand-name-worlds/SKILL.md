@@ -1,6 +1,6 @@
 ---
 name: brand-name-worlds
-description: Turn a project idea into 2-3 stress-tested semantic worlds a naming system could be built from — before any candidate names exist. Run this yourself when you're about to name something and want real leg work instead of picking a word on vibes; it will not fire on its own. Not for critiquing a name you've already got (that's brand-name-critic) and not for generating the actual name candidates (that's a separate step after this one).
+description: Turn a project idea into 2-3 stress-tested semantic worlds a naming system could be built from. Produces no name candidates — it stops at the chosen world. Run this yourself when you're about to name something and want real leg work instead of picking a word on vibes; it will not fire on its own. Not for critiquing a name you've already got (that's brand-name-critic).
 disable-model-invocation: true
 ---
 
@@ -30,9 +30,11 @@ from the fixed catalogue, plus one candidate not on the list.
 
 ## Step 3 — Stress-test fidelity before naming anything
 
-`breadth × fidelity`. Take five real product concepts from the brief and ask what each is called
-in this world. If three of five require a shrug, discard the world. Run this on every surviving
-candidate from Step 2 — this is the step most likely to get rushed, and it's where the value is.
+`breadth × fidelity`. First the `six-siblings test` — can you name six distinct terms from this
+world without straining? Then take five real product concepts from the brief and ask what each is
+called in this world. If three of five require a shrug, discard the world. Run this on every
+surviving candidate from Step 2 — this is the step most likely to get rushed, and it's where the
+value is.
 
 → `references/03-fidelity-test.md`
 
