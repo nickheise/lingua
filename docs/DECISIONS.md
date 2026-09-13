@@ -468,3 +468,111 @@ current identity:
   install command and the compare-links in `CHANGELOG.md`. Renaming either is a separate,
   more consequential action — repo rename affects external links and clone URLs — and wasn't
   part of the instruction, so it wasn't done unilaterally.
+
+---
+
+## ADR-017 — The velocity contract, and detecting read-only runs instead of letting them self-declare
+
+**Date:** 2026-09-13 · **Status:** accepted · **Phase:** 3
+
+**Context.** After using the suite, the user asked for it to be "focused on an outcome" rather
+than only good process — every run should end at names or a verdict, never at a well-written
+document about naming. Separately, the close-out step in all three skills carried a "read-only
+run" carve-out for contexts that cannot write files — a blind QA subagent, an eval harness — so
+they would not fail merely because they could not append to `troubleshooting.md` or
+`shared/naming-decisions-log.md`. That carve-out was a claim an agent made about itself, never a
+condition it could fail: an interactive run could assert "read-only" and produce output
+indistinguishable from a genuine skip, and the close-out is the *only* mechanism that ever
+populates either log — the step with the least incentive to run was also the easiest to fake
+having run.
+
+**Decision.** Added `shared/velocity.md`, referenced (never copied) by all three `SKILL.md`
+files. It binds:
+
+- **The outcome invariant, `names or a verdict`.** Every chain through the suite terminates at
+  exactly one of two artifacts — a set of names (worlds → generator) or a verdict on a name
+  (critic) — and never at a third kind of ending. The file disambiguates two senses of "verdict"
+  once, explicitly, so it is never mistaken for "the verdict" in the sense the critic itself
+  refuses to give — a final, unappealable yes/no; `flag, never block` is what keeps the two senses
+  separate in practice.
+- **A step ledger** that opens each substantive response with *this skill's own* terminal
+  deliverable, stated as "`Step N of M · toward <this skill's terminal deliverable>`" — never the
+  chain's. This is deliberately more than bookkeeping: an agent that can see "names" as the goal
+  while running `brand-name-worlds`' fidelity test will rush that test to get there, which is
+  exactly the failure the maker/critic split (PRD §5.2) exists to prevent, reappearing one level
+  more granular — inside a single skill's own steps, not just across the three-skill chain.
+- **`Earn the question`**, replacing the PRD's original hard four-question cap on the worlds
+  brief. The user explicitly said they would rather be asked more and share the workload than
+  receive a thin brief, so the cap is replaced with a bound the agent has to reason about rather
+  than count against: every question must name what it unblocks, questions get batched rather than
+  dripped, and a vague answer earns exactly one targeted follow-up round before the run proceeds
+  on a stated assumption. The same deletion test that already governs prose in this suite now
+  governs questions too.
+- **A mandatory handoff** at every terminating step: the exact next command, what it produces, and
+  what it needs from what was just produced — so a skill that reaches a real stopping point never
+  strands the user without saying what to run next.
+
+Folded into the same change, as this contract's own enforcement mechanism: the read-only carve-out
+moved from **assertion to detection**. All three skills now attempt the log write first. Only an
+actual failure — no write tool available, no permission, a sandboxed subagent — produces the
+read-only skip line, and it names the reason rather than declaring the condition in advance.
+
+**Why.** `names or a verdict` gives a single, checkable answer to "is this run actually done,"
+instead of letting a thoughtful intermediate artifact pass for completion — the exact drift the
+file's own anti-pattern table calls "the unearned stop." Scoping the step ledger to each skill's
+own deliverable is the goal-leakage fix the maker/critic split already argues for, applied inside
+a single skill rather than only across the three-skill chain. `earn the question` keeps the
+brief-quality gain the user asked for without reopening the opposite failure — an unbounded
+discovery interview — by holding the same deletion-test discipline this suite already applies to
+reference material. And a self-declared, undetectable carve-out on the only mechanism that
+populates the self-improvement log is a carve-out that will get claimed whether or not it is
+true, precisely because it is the step with the least incentive to run in the first place;
+detecting the condition instead of asserting it removes the incentive to cut that corner.
+
+---
+
+## ADR-018 — Head-to-head comparison mode in `brand-name-critic`
+
+**Date:** 2026-09-13 · **Status:** accepted · **Phase:** 3
+
+**Context.** `brand-name-critic`'s own frontmatter already promises it "weighs two names against
+each other," but until now no comparison output shape existed anywhere in the skill. Two
+candidates each got an independent full critique, and diffing the two by eye was left entirely to
+the user.
+
+**Decision.** Added `references/04-comparison.md`, triggered whenever two or more candidates are
+named together. Its rules:
+
+- **Profile and positioning are asked once**, for all candidates, not per candidate — asking
+  per-candidate would both violate `earn the question` and defeat the point of a comparison, which
+  is reading every candidate against the same weights.
+- **`phonetics.py` runs once, batched**, and the result becomes a single ergonomics table —
+  candidates as columns, the six dimensions plus `ergonomics_score` as rows — with every cell
+  unmodified from the JSON, exactly as in a solo critique.
+- **Compare only where dimensions actually differ.** A gap that would not change what a reader
+  decides is marked equivalent in one word rather than argued in a paragraph, so the write-up
+  isn't two solo critiques stapled together with extra steps.
+- **A decisive-dimension rule:** before the recommendation, name the one or two dimensions that
+  actually separate the candidates *under the active profile's weights* — not the largest raw gap
+  — since the same table tells a different story under a different profile.
+- **Brandability stays argued, per candidate, and is never tabled.** A name's world and its
+  namespace crowding are not commensurable across candidates, so each candidate's read is
+  presented as its own bet — what it buys, what it costs — and the file states this explicitly as
+  the reason brandability doesn't get a column.
+- **Practicality can be juxtaposed as flag counts**, narrated only where the candidates' findings
+  actually diverge.
+- **The recommendation is locked to three named slots** — the pick, the strongest case for the
+  other candidate, and what would flip it — with no slot a ranking or a score could occupy. A
+  genuine tie is a legitimate terminal answer, provided the tie-breaker is named, rather than an
+  invented preference.
+
+**Why.** A side-by-side table is the single most tempting place in the whole rubric to resurrect
+the composite score PRD §4.1 was built to kill — once ergonomics numbers sit in adjacent columns,
+the pull toward summing or ranking them is strong, and doing so would just relocate the composite
+into a table instead of a critique. The file states the rule at its most literal ("if a sentence
+could be replaced by two numbers and a greater-than sign, rewrite it") precisely because a softer
+version of the rule is exactly what a table format erodes first. Keeping brandability un-tabled
+and making a named tie a legitimate terminal answer are both the same discipline as
+`flag, never block` applied one layer over: report the real relationship between two candidates,
+including "there isn't a decisive difference," rather than manufacturing a verdict the evidence
+doesn't support.

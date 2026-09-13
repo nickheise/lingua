@@ -32,10 +32,32 @@ criteria that must be met before the next begins.
   locked to three named slots (pick / strongest case for the other / what would flip it) with no
   slot a ranking or a score could occupy.
 
+### Fixed
+- **Reconciled `docs/BUILD-MAP.md` against three real commits that had landed without updating
+  it** (an adversarial review pass): added `names or a verdict` to §1's leading-word table with its
+  real verbatim locations; added `shared/velocity.md` and
+  `references/04-comparison.md` to §2's file inventory; flagged §3's worked Scout JSON example as
+  illustrative-shape-only rather than a live reading (its numbers had drifted from what
+  `phonetics.py` now returns) and pointed at `scripts/README.md`'s own JSON-contract section as
+  the reconciled, current worked example instead of hand-patching numbers that will drift again;
+  and ticked two Phase 1 exit criteria a blind validation run had already demonstrated
+  (three-context-profile divergence, leading words shaping the reasoning trace) while leaving the
+  hand-written-target comparison honestly open.
+- **Added ADR-017 and ADR-018 to `docs/DECISIONS.md`**, recording rationale for two decisions that
+  had already shipped with none on record: the `shared/velocity.md` contract plus detecting
+  read-only close-out runs instead of letting them self-declare (ADR-017), and comparison mode's
+  design rules (ADR-018).
+- **`docs/reference-critiques/00-README.md` overstated a reconciliation.** It claimed the real
+  script "also returns 85 for Scout, from the same six dimensions the build map's worked example
+  carries." The mean does coincide — both round to 85 — but the individual dimensions differ
+  (density 7→26, spellability 78→84, distinctiveness 62→50, among others); corrected to say the
+  dimensions were re-derived from real script output, not confirmed as already matching it.
+- **World-catalogue count corrected**: the `[0.3.0]` entry above said 16 domains; the fixed
+  catalogue in `02-world-sourcing.md` actually has 17.
+
 ### Planned
 - **Phase 3 → `1.0.0`** — factor, audit, and prune: single source of truth for every reference,
   the deletion test on every paragraph, and a leading-word trace audit across all three skills.
-  An adversarial review pass is in progress; findings will land here once triaged.
 
 ## [0.3.0] — 2026-08-24
 
@@ -49,7 +71,7 @@ load-bearing and retrofitting it would mean rewriting both.
     Canvas present, use it silently; canvas absent, ask four questions and proceed. Demanding a
     canvas would make the skill useless at idea stage, which is when naming actually happens.
   - `references/02-world-sourcing.md` — answers PRD open question 4 the way the PRD leans: a fixed
-    16-domain catalogue plus a mandatory "propose one not on this list" step. Each domain carries
+    17-domain catalogue plus a mandatory "propose one not on this list" step. Each domain carries
     its vocabulary, what it maps onto, what it is bad at, and whether its imagery is already
     drawn. Gardening is included and flagged as a charm trap, since it is the PRD's own worked
     failure case.

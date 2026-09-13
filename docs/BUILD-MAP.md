@@ -41,6 +41,7 @@ These phrases must appear **verbatim and repeatedly** in the skill files, never 
 | `read the ending` | critic brandability ref, critic SKILL.md |
 | `flag, never block` | critic SKILL.md, practicality ref, all three profiles |
 | `diverge → cluster → converge` | generator SKILL.md |
+| `names or a verdict` | `shared/velocity.md` (where it's defined — §1's outcome invariant), all three SKILL.md files, critic `references/04-comparison.md` |
 
 **Verification is a build step, not a preference.** Phase 3 runs a blind trace audit: run each
 skill, read the reasoning trace, confirm the phrases are echoed back. If they are not, the
@@ -79,6 +80,7 @@ lingo/
 │   │   │   ├── 01-ergonomics.md           ▣  interprets script JSON; 6 dimensions
 │   │   │   ├── 02-brandability.md         ▣  generativity, familiarity, lore, fit, ownability
 │   │   │   ├── 03-practicality.md         ▣  TM tiers, knockout heuristic, domains
+│   │   │   ├── 04-comparison.md           ▣  head-to-head mode for 2+ candidates; no composite, ever
 │   │   │   ├── myths-blocklist.md         ▣  Chevy Nova et al. — never repeat as fact
 │   │   │   ├── troubleshooting.md         ▣  self-improvement log (§5.6), seeded empty
 │   │   │   └── profiles/
@@ -115,7 +117,8 @@ lingo/
 └── shared/                                    ── built in Phase 1, used by all three ──
     ├── name-types.md                      ▣  descriptive → suggestive → coined, mapped to TM tiers
     ├── example-bank.md                    ▣  real names by type, industry, era
-    └── naming-decisions-log.md            ▣  the taste log (§5.6) — proposed / chosen / rejected
+    ├── naming-decisions-log.md            ▣  the taste log (§5.6) — proposed / chosen / rejected
+    └── velocity.md                        ▣  added post-launch; binding outcome contract (§1 below)
 ```
 
 Skills reach shared material through `${CLAUDE_PLUGIN_ROOT}/shared/<file>.md`. It sits *outside*
@@ -144,6 +147,19 @@ python3 scripts/phonetics.py --file benchmark.txt       # one name per line
 ```
 
 Output — a single JSON object per name, keys stable, no key ever omitted:
+
+**What's pinned below is the shape, not a live reading.** The Scout numbers in this example are
+illustrative — they establish which keys exist, their types, and the invariants in the rules that
+follow, exactly as ADR-004 intends. They are **not** kept in sync with `phonetics.py`, and a real
+run has since diverged from several of them (`spellability` 78→84, `distinctiveness` 62→50,
+`neighborhood.density` 7→26, `.percentile` 61→84, plus a different neighbor list and a shorter
+`homophone_spellings`) while `ergonomics_score` still happens to round to the same 85 — a
+coincidence of the mean, not evidence the rest matches; see `docs/reference-critiques/00-README.md`
+for the fuller reconciliation note. Rather than hand-patch numbers here every time the script's
+scoring changes — the exact drift this example just suffered — treat
+[`scripts/README.md`](../skills/brand-name-critic/scripts/README.md)'s own JSON-contract section as
+the authoritative, current worked example: it lives beside `phonetics.py` and stays reconciled by
+construction. Only the shape below is binding on both sides of the contract.
 
 ```jsonc
 {
@@ -254,9 +270,29 @@ a fresh-context subagent runs the skill blind and the outputs are compared.
 - [x] g2p fallback error rate **measured** against held-out CMUdict and published in
       `scripts/README.md` — 32.8% exact phoneme match, 79.4% per-phoneme. PRD open question 2 is
       answered with a number, not a shrug. See ADR-013.
-- [ ] Three context profiles produce visibly different verdicts on the same name
-- [ ] Leading words appear in the reasoning trace
-- [ ] Blind subagent output resembles the hand-written targets
+- [x] Three context profiles produce visibly different verdicts on the same name — demonstrated
+      in-repo on Scout: `venture.md` recommends (generativity near-maximal, ownability flagged
+      `high` but non-fatal per `flag, never block`); `feature.md` rejects as proposed (fails the
+      sibling-consistency check outright); `codename.md` reads as ideal on its own axes but flags
+      `medium-high` leak risk *because* it scores too well — a rejection-relevant finding specific
+      to that profile. Confirmed current after the profile-file rewrite that replaced literal
+      score multipliers with qualitative emphasis language (a reviewer fix, not yet its own ADR) —
+      the divergent-verdict property lives in the argued outcome, not the numbers, so it survived
+      untouched.
+- [x] Leading words appear in the reasoning trace — confirmed by an independent blind validation
+      run against a name absent from the skill's own material (Kestrel, not Scout — Scout is
+      contaminated as the worked example baked into all three profile files and the template, so
+      it can't tell reasoning from pattern-matching). That run produced three genuinely different
+      verdicts from mechanically different gates and confirmed five of the six leading words
+      shaping what got written rather than merely describing it; the resulting fixes are folded
+      into `01-ergonomics.md`, `03-practicality.md`, and all three `SKILL.md` files.
+- [ ] Blind subagent output resembles the hand-written targets — not yet demonstrated as written.
+      The one blind run performed deliberately used Kestrel instead of Scout/Balance/Xzrq, for the
+      contamination reason above, so it validated the skill's general behavior rather than a
+      literal comparison against `docs/reference-critiques/`. That direct comparison is
+      structurally hard to run blind, since the answer key is embedded in the skill's own
+      reference material — worth flagging as a real gap against this criterion as written, not
+      papering over.
 
 ### Phase 2 — `brand-name-worlds` + `brand-name-generator` `v0.3.0`
 Built second because Phase 1 defines what good output looks like, and the generator's

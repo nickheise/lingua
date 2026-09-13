@@ -115,12 +115,27 @@ fields rather than on a count of zero, and says out loud that the exact ARPABET 
 least reliable part of the document even though the no-nucleus finding itself holds under any
 plausible transcription.
 
-**One number in the PRD does not match one number in the build map — and this is resolved, not
-open.** PRD §4.1 illustrates the headline with `Ergonomics 89 · Brandability: exceptional world,
-crowded namespace · Practicality: 2 flags`, while the worked Scout JSON in BUILD-MAP §3 yields
-`ergonomics_score: 85` from its own six dimension scores. Running the real script settles it: it
-also returns **85** for Scout, from the same six dimensions the build map's worked example carries.
-So the contract's worked example was right, and the PRD's `89` was exactly what ADR-008 says it
-was — an illustration, not a specification. `venture-scout.md` reports 85, matching the script.
-`assets/critique-template.md` no longer keeps `89` attached to Scout either, for the same reason:
-see the note in that file. Both facts are recorded here rather than left as a live discrepancy.
+**One number in the PRD does not match one number in the build map — and this is resolved, but not
+the way it first looked.** PRD §4.1 illustrates the headline with `Ergonomics 89 · Brandability:
+exceptional world, crowded namespace · Practicality: 2 flags`, while the worked Scout JSON in
+BUILD-MAP §3 yields `ergonomics_score: 85` from its own six dimension scores. Running the real
+script does return **85** for Scout — but not from the same six numbers. `phonetics.py`'s actual
+output moves most of the dimensions underneath that mean: spellability 78→84, distinctiveness
+62→50, and the neighbourhood reading behind it (density 7→26, percentile 61st→84th, plus a
+different neighbor list and a shorter `homophone_spellings`). Pronounceability, rhythm & recall,
+and verbability happen to match. The mean of the *real* six numbers still rounds to 85 — that is
+a coincidence of rounding two different sets of numbers to the same integer, not confirmation that
+the build map's worked example was already correct. Say the honest version: the dimensions were
+**re-derived from the real script's output**, not verified as already matching it, and the fact
+that they land on the same headline number is not evidence the inputs agreed.
+
+`venture-scout.md` reports 85 because it was reconciled against the real script per ADR-008, the
+same as every other number in these three targets — not because BUILD-MAP §3's illustrative
+numbers turned out to be right. `assets/critique-template.md` no longer keeps `89` attached to
+Scout either, for the same reason. BUILD-MAP §3 itself now carries a note that its worked example
+is shape-only and points at `scripts/README.md`'s JSON-contract section for the real current
+numbers, rather than staying a second copy of numbers that will drift again. So the PRD's `89` was
+exactly what ADR-008 says it was — an illustration, not a specification — and so, one level down,
+was the build map's `85`: right on the final mean, not on the numbers that produced it. This is the
+kind of overclaim `myths-blocklist.md` argues against making about a candidate name; the same
+standard applies to this file's own claims about its own build.

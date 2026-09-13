@@ -9,7 +9,7 @@ exactly one domain not on this list.**
 Why hybrid rather than either pure form: a fixed catalogue is consistent (the same domain gets
 evaluated the same way run to run) and prunable (a domain that keeps failing fidelity tests can
 be edited or removed once, here, rather than re-discovered as a bad idea every run). A free-form
-catalogue is more surprising and can fit an unusual product better than any of these fifteen
+catalogue is more surprising and can fit an unusual product better than any of these seventeen
 domains do. The explicit "propose one not on this list" step buys the surprise back without
 paying for consistency everywhere else.
 
