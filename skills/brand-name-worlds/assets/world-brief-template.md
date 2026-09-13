@@ -105,6 +105,17 @@ replacing.>
 
 ---
 
+## Chosen world
+
+<Ask which of the survivors above to build in — directly, and wait for the answer. This is not
+optional and not a stallable question: the generator cannot run without exactly one chosen world.
+Record the answer here.>
+
+**Chosen:** <world name, one of the survivors above — a domain, never a name candidate>
+**Runners-up:** <the other survivor(s), staying on record as discarded-but-recorded, not deleted>
+
+---
+
 ## Discarded worlds
 
 <Short list, one line each: world, why it was cut — thin breadth, shrug count, or core-surface
@@ -122,9 +133,9 @@ break. Keeps the rejection on the record instead of silent.>
 
 ```
 Next: /lingo:brand-name-generator
-Produces ~12 candidates inside your chosen world, each with three sibling names and a usage
+Produces ~12 candidates inside <chosen world>, each with three sibling names and a usage
 sentence, independently critiqued.
-Needs: the chosen world from the brief above.
+Needs: nothing further — the chosen world is recorded above.
 ```
 ````
 
@@ -135,16 +146,21 @@ Needs: the chosen world from the brief above.
 1. **No name candidates anywhere in the document.** Not in the survivors section, not in a
    parenthetical, not in the closing line. If a word for the product would need to appear to make
    a sentence read naturally, rewrite the sentence around the world's shape instead.
-2. **Discards are recorded, not deleted.** A world that failed the 3-of-5 threshold or broke on a
-   core surface stays in the document with its evidence — useful for the generator step and for
-   anyone re-running this later on updated positioning.
+2. **Discards are recorded, not deleted, in two different places.** A world that failed the 3-of-5
+   threshold or broke on a core surface goes in **Discarded worlds** — it never reached a choice.
+   A world that passed the fidelity test but wasn't picked at Step 4 goes in **Chosen world →
+   Runners-up** — it reached the choice and lost. Both stay with their evidence, useful for the
+   generator step and for anyone re-running this later on updated positioning.
 3. **The five concepts are fixed across every world tested.** Re-picking flattering concepts per
    world defeats the test; call this out if it happens.
 4. **Every survivor's case rests on evidence already written above it** — breadth, the five-concept
    table, the breaking point. No new claims introduced only in the survivors section.
-5. **The handoff is a command, not a candidate.** The `## Next` block is copied verbatim: the
+5. **Choosing a world is not naming the product.** The **Chosen world** section names a domain
+   ("cartography"), never a candidate word. Rule 1 still applies to it in full — a domain name is
+   not an exception to "no name candidates," it's simply a different kind of noun.
+6. **The handoff is a command, not a candidate.** The `## Next` block is copied verbatim: the
    command, what it produces, what it needs. It never previews a name, teases one, or says which
    survivor "feels closest." Rule 1 applies to it exactly as it applies to every section above.
-6. **The ledger states this skill's deliverable.** `Step 4 of 4 · toward 2-3 stress-tested
+7. **The ledger states this skill's deliverable.** `Step 4 of 4 · toward 2-3 stress-tested
    worlds` — never "toward a shortlist," never "toward names." The reader learns the next leg from
    the handoff at the foot, after the work is done.

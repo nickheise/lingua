@@ -17,28 +17,36 @@ feature/UI, or internal codename?" — do not guess silently. Venture is the hig
 misapplication of the three (see [`feature.md`](feature.md) for why applying this profile to a
 feature name is the Copilot failure mode in reverse).
 
-## 2. Weights
+## 2. Emphasis
 
-`ergonomics_score` in the script output is profile-independent — this table is what the skill
-does with `dimensions[*].score` before arguing brandability. Multiply, don't re-derive.
+`ergonomics_score` in the script output is profile-independent, and there is no weighted
+recomputation anywhere in this skill — see `SKILL.md` ("re-weight in prose, never in arithmetic")
+and [`../01-ergonomics.md`](../01-ergonomics.md) §4 ("do not compute a weighted score"). What this
+table sets is **how much space each dimension gets in the argument** — which findings lead the
+critique and which get one clause or none. Multiplying a score by a number here would recreate
+the exact composite the PRD kills, one profile down.
 
-| Ergonomics dimension | Weight | Note |
+| Ergonomics dimension | Emphasis | Note |
 |---|---|---|
-| Pronounceability | ×1.0 neutral | Baseline hearability still gates everything |
-| Spellability | ×1.0 neutral | Not a venture-specific lever |
-| Distinctiveness | **×1.5 up** | Core venture asset — low neighborhood density, search ownability |
-| Rhythm & recall | ×1.0 neutral | Always useful, not profile-specific |
-| Verbability | **×1.4 up** | "Let's Scout this" is a growth signal a feature name never needs |
-| International robustness | ×1.0 neutral | Matters if the market is global; not the defining axis here |
+| Pronounceability | medium | Baseline hearability still gates everything |
+| Spellability | medium | Not a venture-specific lever |
+| Distinctiveness | **very high** | Core venture asset — low neighborhood density, search ownability |
+| Rhythm & recall | medium | Always useful, not profile-specific |
+| Verbability | **high** | "Let's Scout this" is a growth signal a feature name never needs |
+| International robustness | medium | Matters if the market is global; not the defining axis here |
 
-| Brandability criterion | Weight | Note |
+Brandability has no scores to set emphasis on — [`../02-brandability.md`](../02-brandability.md)
+is explicit that a number here would be false precision. What this table sets instead is **how
+much scrutiny each criterion gets**, which argument leads, and which counter-argument matters most:
+
+| Brandability criterion | Scrutiny here | Note |
 |---|---|---|
-| Generativity | **×1.5 up** | `world, not word` — this is the single highest-leverage axis for a venture name |
-| Cultural familiarity (cultural-commons mode) | **×0.7 down** | This is where "weight down instant descriptiveness" cashes out: pre-loaded meaning is good, but too much of it *is* descriptiveness, which is the opposite of what a venture name wants |
-| Cultural familiarity (owned-IP mode) | ×1.0 neutral | Still flag as a risk requiring justification per the base rubric — this profile doesn't change that |
-| Lore integrity | ×1.0 neutral | `read the ending` applies at full strength regardless of profile |
-| Sound-symbolism fit | ×1.0 neutral | Tie-breaker at any weight |
-| Ownability | **×1.6 up** | Highest-weighted axis of the three profiles — see special rule |
+| Generativity | **the lead argument** | `world, not word` — the single highest-leverage criterion for a venture name; open with it |
+| Cultural familiarity (cultural-commons mode) | **discount it** | This is where "weight down instant descriptiveness" cashes out: pre-loaded meaning is good, but too much of it *is* descriptiveness, which is the opposite of what a venture name wants |
+| Cultural familiarity (owned-IP mode) | full strength | Still flag as a risk requiring justification per the base rubric — this profile doesn't change that |
+| Lore integrity | full strength | `read the ending` applies at full strength regardless of profile |
+| Sound-symbolism fit | tie-breaker only | Never more than that, at any profile |
+| Ownability | **the counterweight** | Gets the most severity-labeled airtime of the three profiles — see special rule |
 
 **On "weight down instant descriptiveness":** this isn't a rubric dimension to multiply, it's an
 instruction that reaches into practicality's trademark-distinctiveness tier
@@ -66,9 +74,9 @@ either — a crowded namespace is a cost to plan around (legal budget, a modifie
 differentiated domain), never a disqualification the critic imposes unilaterally. The user
 decides whether the cost is worth paying.
 
-## 4. What a good verdict / rejection look like here
+## 4. What a good outcome / rejection look like here
 
-**Good verdict:** high generativity with a real `six-siblings test` pass, strong verbability,
+**Good outcome:** high generativity with a real `six-siblings test` pass, strong verbability,
 distinctiveness that at minimum sits above the neighborhood-density median — with ownability
 findings reported honestly, severity-labeled, and never treated as disqualifying on their own.
 
@@ -82,7 +90,7 @@ nothing to say once the first ten sibling names run out.
 
 Picking a name that is comfortable and instantly understood but has nothing left to give a
 product as it grows — a name that describes the category instead of building brand architecture.
-Comfortable and unoriginal is a valid verdict; the profile exists so it gets said out loud instead
+Comfortable and unoriginal is a valid recommendation; the profile exists so it gets said out loud instead
 of hiding behind a high ergonomics score.
 
 ## Worked micro-example: Scout
@@ -95,5 +103,5 @@ lives: Scout Motors, Scout24, Scout APM, and the scouting movement all occupy th
 ownability finding is reported at `high` severity — the loudest ownability language of the three
 profiles, because this is where it matters most. Per `flag, never block`, that finding does not
 sink the recommendation; it becomes a named cost (trademark search, likely need for a modifier or
-a differentiated visual mark) the user weighs against the generativity payoff. Net verdict:
-recommend, with the ownability risk stated plainly rather than buried.
+a differentiated visual mark) the user weighs against the generativity payoff. Recommend, with
+the ownability risk stated plainly rather than buried.

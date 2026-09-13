@@ -74,7 +74,7 @@ the word "generator" in the agent's mouth at exactly the moment the guard is hol
 candidate, and the obvious slip is a bridging sentence — "the cartography world would generate
 something like…", or a `Needs:` line that names a survivor *and* a word it suggests. Watch for a
 leak specifically **between** the guard and the handoff block, and in the `Needs:` line. The
-structural mitigation is that the block is copied verbatim (template rule 5) and contains no
+structural mitigation is that the block is copied verbatim (template rule 6) and contains no
 free-text slot; if a leak lands there anyway, the fix is removing the free text around it, not
 removing the handoff — a run that strands the user is a different failure, not a safer one.
 **Status:** anticipated — this is the highest-priority thing to watch on the first real run.
@@ -127,7 +127,7 @@ the one the user actually wants. `velocity.md` §2 is explicit that this is the 
 an agent that can see "names" as the goal while running the fidelity test will rush the fidelity
 test to get there — the same pressure as the leak entry above, arriving one line earlier.
 **Fix (anticipated):** `SKILL.md` states the ledger string literally and says why the chain's
-outcome must not enter it; template rule 6 repeats the constraint at the output. If a leak is
+outcome must not enter it; template rule 7 repeats the constraint at the output. If a leak is
 observed, check whether it correlates with a thinner fidelity test in that same run — that
 correlation is the thing worth knowing, and it would justify treating the ledger string as
 copy-verbatim rather than composed.
@@ -160,3 +160,21 @@ non-negotiable for exactly this reason. If rounding is observed anyway, the fix 
 tightening the shrug definition itself (e.g., a mapped term that required more than one clause of
 justification counts as a shrug) rather than restating "be strict" louder.
 **Status:** anticipated.
+
+### 2026-09-13 — the handoff named a "chosen world" that never got chosen
+**Symptom:** an adversarial review found that Step 4 converges to 2-3 survivors and stops, then
+the handoff's `Needs:` line read "the chosen world from the brief above" — but nothing in the
+skill ever asked the user to pick one. `brand-name-generator` correctly refuses to proceed
+without a single world, so a user following worlds straight into the generator was bounced back
+to the skill they had just finished.
+**Cause:** the handoff was added in the velocity retrofit without rereading whether its
+precondition — a singular chosen world — actually existed anywhere upstream. It didn't; the skill
+only ever produced a plural shortlist of survivors.
+**Fix:** `resolved-into-docs`. Step 4 now has an explicit selection sub-step between presenting
+survivors and handing off: ask which world to build in, directly, and wait — stated as the one
+deliberate exception to `velocity.md`'s "never stall," since the generator genuinely cannot run
+without an answer. The template gained a **Chosen world** section (with a **Runners-up** field
+distinct from **Discarded worlds** — one reached the choice and lost, the other never reached it)
+and the `Needs:` line now reads "nothing further — the chosen world is recorded above" instead of
+pointing at something that may not exist.
+**Status:** resolved-into-docs.

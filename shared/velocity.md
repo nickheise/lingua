@@ -86,10 +86,10 @@ step ends with:
 - **what it needs** from what was just produced
 
 ```
-Next: /brand:name-generator
+Next: /lingo:brand-name-generator
 Produces ~12 candidates inside your chosen world, each with three sibling names and a usage
 sentence, independently critiqued.
-Needs: the chosen world from the brief above.
+Needs: nothing further — the chosen world is recorded above.
 ```
 
 If the run has reached a terminal artifact — names or a verdict — say so plainly and offer the

@@ -20,43 +20,49 @@ consistency check runs on. Do not guess it, and do not proceed on assumed siblin
 [`venture.md`](venture.md) may correctly fail here — that is not a contradiction, it is the point
 of having separate profiles.
 
-## 2. Weights
+## 2. Emphasis
 
-`ergonomics_score` in the script output is profile-independent — this table is what the skill
-does with `dimensions[*].score` before arguing brandability. Multiply, don't re-derive.
+`ergonomics_score` in the script output is profile-independent, and there is no weighted
+recomputation anywhere in this skill — see `SKILL.md` ("re-weight in prose, never in arithmetic")
+and [`../01-ergonomics.md`](../01-ergonomics.md) §4 ("do not compute a weighted score"). What this
+table sets is **how much space each dimension gets in the argument.**
 
-| Ergonomics dimension | Weight | Note |
+| Ergonomics dimension | Emphasis | Note |
 |---|---|---|
-| Pronounceability | ×1.0 neutral | Still gates everything; not a special lever here |
-| Spellability | **×1.5 up** | It will appear in search boxes, support macros, and typed commands |
-| Distinctiveness | **×0.5 down** | The opposite instinct from venture — blending into the existing UI vocabulary is correct |
-| Rhythm & recall | ×1.0 neutral | Not a special lever |
-| Verbability | ×1.0 neutral | A feature name earning a verb is a nice accident, not a goal |
-| International robustness | **×1.4 up** | Support text, localization, and screen-reader use raise the cost of a hard phoneme far above venture-naming stakes |
+| Pronounceability | medium | Still gates everything; not a special lever here |
+| Spellability | **very high** | It will appear in search boxes, support macros, and typed commands |
+| Distinctiveness | **low — often inverted** | The opposite instinct from venture — blending into the existing UI vocabulary is correct |
+| Rhythm & recall | medium | Not a special lever |
+| Verbability | medium | A feature name earning a verb is a nice accident, not a goal |
+| International robustness | **high** | Support text, localization, and screen-reader use raise the cost of a hard phoneme far above venture-naming stakes |
 
-| Brandability criterion | Weight | Note |
+Brandability has no scores to set emphasis on — [`../02-brandability.md`](../02-brandability.md)
+is explicit that a number here would be false precision. What this table sets instead is **how
+much scrutiny each criterion gets**, which argument leads, and which counter-argument matters most:
+
+| Brandability criterion | Scrutiny here | Note |
 |---|---|---|
-| Generativity | **×0.6 down** | Re-scope, don't discard: score it as *fit into the existing system*, not new-world creation — see special rule |
-| Cultural familiarity (cultural-commons mode) | **×1.5 up** | This is where "weight up clarity" cashes out: pre-loaded, zero-education meaning is exactly what UI text needs |
-| Cultural familiarity (owned-IP mode) | ×1.0 neutral | Still flag as a risk requiring justification per the base rubric |
-| Lore integrity | ×1.0 neutral | `read the ending` applies at full strength regardless of profile |
-| Sound-symbolism fit | **×0.6 down** | Where "weight down cleverness" cashes out — a clever phonetic personality is not what a command label needs |
-| Ownability | **×0.5 down** | Near-irrelevant inside an existing product's UI; the parent product carries the trademark load |
+| Generativity | **re-scoped, not discarded** | Score it as *fit into the existing system*, not new-world creation — see special rule |
+| Cultural familiarity (cultural-commons mode) | **the lead argument** | This is where "weight up clarity" cashes out: pre-loaded, zero-education meaning is exactly what UI text needs |
+| Cultural familiarity (owned-IP mode) | full strength | Still flag as a risk requiring justification per the base rubric |
+| Lore integrity | full strength | `read the ending` applies at full strength regardless of profile |
+| Sound-symbolism fit | **discount it** | Where "weight down cleverness" cashes out — a clever phonetic personality is not what a command label needs |
+| Ownability | **near-irrelevant** | The parent product carries the trademark load |
 
-`Flag, never block` still holds at this weight — a down-weighted ownability finding still gets
-reported if something is genuinely collision-prone, it just carries less volume in the verdict
-than it would under [`venture.md`](venture.md). Down-weighting is not the same operation as
-skipping the check.
+`Flag, never block` still holds even at low emphasis — a de-emphasized ownability finding still
+gets reported if something is genuinely collision-prone, it just carries less airtime in the
+recommendation than it would under [`venture.md`](venture.md). De-emphasizing is not the same
+operation as skipping the check.
 
 ## 3. Special rule: penalize coined names hard, check fit with the existing system
 
 **Coined-name penalty.** If the candidate's TM-distinctiveness tier (see
 [`${CLAUDE_PLUGIN_ROOT}/shared/name-types.md`](${CLAUDE_PLUGIN_ROOT}/shared/name-types.md)) is
-coined or fanciful, apply an *additional* ×0.5 on top of the distinctiveness down-weight above.
-Ground this in the real case: Apple's own guidance rejected "Spending Power" for the plain word
-"Balance" — clarity and trust beat brand expression inside an app. NN/G is emphatic that command
-text should be descriptive, not branded. A feature name earning a high score by being clever is
-scoring on the wrong axis entirely.
+coined or fanciful, that is a **rejection-level finding under this profile**, on top of — not
+instead of — the low emphasis on distinctiveness above. Ground this in the real case: Apple's own
+guidance rejected "Spending Power" for the plain word "Balance" — clarity and trust beat brand
+expression inside an app. NN/G is emphatic that command text should be descriptive, not branded.
+A feature name earning a high score by being clever is scoring on the wrong axis entirely.
 
 **Sibling-consistency check — run this explicitly, every time:**
 
@@ -75,9 +81,9 @@ things until the NAD found customers could not distinguish the products. A featu
 without a sibling-consistency check will happily help build that. Running step 1–4 above is what
 prevents it.
 
-## 4. What a good verdict / rejection look like here
+## 4. What a good outcome / rejection look like here
 
-**Good verdict:** plain, spellable, passes the sibling-consistency check without qualification —
+**Good outcome:** plain, spellable, passes the sibling-consistency check without qualification —
 "Balance" beside "Overview," "Activity," "Settings," not "Spending Power" beside them.
 
 **Rejection looks like:** a coined or branded name for a command or label — something that would
@@ -97,8 +103,8 @@ tell the products apart.
 Proposed as a feature name inside a product whose sibling features are plainly named — "Search,"
 "Filters," "History" — Scout fails the sibling-consistency check outright, even though it scored
 well under `venture.md`. It's a branded, metaphor-bearing name dropped into a plain-language
-system: exactly the opposite-problem case this profile exists to catch. Verdict: reject as
-proposed. The only path to a pass is if the *whole* sibling set is being deliberately renamed
+system: exactly the opposite-problem case this profile exists to catch. Reject as proposed. The
+only path to a pass is if the *whole* sibling set is being deliberately renamed
 together into Scout's cartography vocabulary (waypoints, routes, base camp as first-class UI
 concepts) — at which point this stops being a single feature-naming decision and becomes a
 system redesign, which is out of scope for this profile alone.
