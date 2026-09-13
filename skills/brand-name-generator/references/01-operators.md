@@ -103,8 +103,10 @@ cultural familiarity and pre-loaded meaning a real word would have brought for f
 to do all its own work from a standing start.
 **Produces.** Fanciful — the strongest trademark tier and the highest education cost, together.
 `rare letters, common sounds` is the rule that governs whether a coinage is sayable or a pile of
-consonants: a rare letter on a common sound is the sweet spot, and the sounds still have to
-assemble into legal syllables (Xerox, not Xzrq).
+consonants — see `${CLAUDE_PLUGIN_ROOT}/shared/example-bank.md` §2 for the full rule and the
+Kodak/Exxon-vs-Xzrq contrast; don't restate it here. Note Kodak and Exxon are true phoneme
+coinage (no root at all); Xerox is not — it clips a real Greek root (see `shared/name-types.md`)
+and belongs to the Clip/Respell family instead, even though it reads as fanciful once fused.
 
 ### Shortest-synonym (the Synomin pattern)
 **Definition.** Name the core function plainly, in-world: list the real synonyms already
@@ -137,8 +139,7 @@ initialism (no name-type upgrade) if it never resolves as a word.
 | Phoneme coinage | Ownability | Cultural familiarity, all pre-loaded meaning |
 | Foreign-source | A true, fitting meaning most of the audience can't read | Cross-cultural risk (the critic's practicality layer screens this) |
 
-`rare letters, common sounds` is the rule that governs respells and coinages specifically: a rare
-*letter* mapped onto a completely common *sound* is the sweet spot (Xerox: X→/z/). A rare letter
-that produces an illegal cluster instead — no vowel nucleus, an onset English doesn't license —
-fails the rule even though the individual sounds are common (Xzrq). Check both halves before a
+`rare letters, common sounds` governs respells and coinages specifically. See
+`${CLAUDE_PLUGIN_ROOT}/shared/example-bank.md` §2 for the full rule and worked examples — do not
+restate the table or the argument here. Check both halves (common sound, legal syllable) before a
 respell or coinage advances past Pass 2.

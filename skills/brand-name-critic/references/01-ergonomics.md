@@ -49,18 +49,11 @@ Say so.
 
 ---
 
-## 1. Why six dimensions and not seventeen
+## 1. The six dimensions
 
-Context you need in order to resist the urge to add more.
-
-The source ergonomics document had **seventeen** weighted dimensions. Seventeen fails in a
-specific, predictable way: **everything scores 85–95, because no name is bad at all of them, and
-the composite becomes noise.** Several were also the same dimension wearing different hats —
-phonotactics, syllable simplicity, mouth ergonomics and sonority flow are four views of "is this
-easy to say." Neumeier uses seven, Watkins five, Igor four.
-
-Applying the deletion test — *would removing this change the output?* — most were no-ops. The six
-that survive:
+The script emits exactly six dimensions, always — collapsed by the deletion test from a longer
+source list of overlapping ones. The agent cannot add a seventh; what matters here is what the six
+are and how to read them:
 
 | # | Dimension | Absorbed | The question it answers |
 |---|---|---|---|
@@ -102,9 +95,9 @@ in Layer 1.
 | 40–59 | A real problem on this dimension. | Say what breaks, and check whether the profile weights it up. |
 | 0–39 | Structural failure. | Check whether the dimension is a **floor** (§3). If it is, say plainly that no other score compensates. |
 
-Never report a score without a consequence. "Spellability 78" is data. "Spellability 78 — /aʊ/
-has two common spellings, so a measurable fraction of people who only hear the name will type
-`Skout`, which is a live app" is a finding.
+Never report a score without a consequence. "Spellability 84" is data. "Spellability 84 —
+`ou` has four common readings (out, soup, tough, four), so a measurable fraction of people who
+only hear the name will type `scowt`" is a finding.
 
 ### 1 · Pronounceability
 
@@ -172,21 +165,9 @@ word-of-mouth traffic. Close to irrelevant under **codename**.
 | `false` | Rare letters present, landing on rare, awkward or impossible sounds. | Distinctiveness bought by making the name harder to say — a bad trade under every profile. |
 | `null` | No rare letters in the spelling. | Not a fault. Most good names are here; distinctiveness must then come from density or from Layer 2. |
 
-**The contradiction this resolves, and you should state it when the case calls for it.** Rich
-Barton advises using high-point Scrabble letters (Z, Q, X, J, K) *and* advises picking a word a
-four-year-old can say — and does not notice that these appear to conflict. His own examples
-resolve it:
-
-| Name | Rare letter | Sound it makes | Common sound? |
-|---|---|---|---|
-| **Xerox** | X | /z/ (and /ks/ at the end) | yes — both ordinary |
-| **Kodak** | K | /k/ | yes — one of the most frequent consonants in English |
-| **Coke** | K | /k/ | yes |
-| **Zillow** | Z | /z/ | yes |
-
-Every one maps a rare **letter** onto a completely common **sound**. **None uses a rare phoneme.**
-You get low neighbourhood density and better search ownability without paying an articulatory
-cost.
+See `${CLAUDE_PLUGIN_ROOT}/shared/example-bank.md` §2 for the full `rare letters, common sounds`
+table (Xerox, Kodak, Coke, Zillow) and the Barton contradiction it resolves. Do not restate the
+table or the argument here — there is exactly one copy of it on purpose.
 
 **The rule has a second half that only becomes visible on bad names.** The mapping must be
 letter→common-phoneme, *and* those phonemes must be arranged into legal syllables. Xerox and Xzrq
@@ -227,8 +208,8 @@ score is frequently the requirement — a distinctive feature label is a bug.
 
 | Shape | Reading |
 |---|---|
-| Monosyllable | Maximally reproducible. Ceiling. |
-| Trochee (`10`) — *Kodak*, *Notion*, *Balance* | The default strong shape in English. Near-ceiling. |
+| Monosyllable | Maximally reproducible. Near-ceiling; the trochee scores above it (see `scripts/README.md` for why). |
+| Trochee (`10`) — *Kodak*, *Notion*, *Balance* | The default strong shape in English. Ceiling — scores above a monosyllable, because it gives a listener a beat to hold onto. |
 | Iamb (`01`) — *Adobe*-ish | Fine, slightly less sticky than a trochee. |
 | Dactyl (`100`) — *Wikipedia*-ish | Works, but three syllables invites clipping. |
 | No dominant stress, or `pattern` empty | The name has no rhythm to remember. Serious. |

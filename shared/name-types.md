@@ -36,14 +36,19 @@ the output, that one drives the process):
 - *Blend / splice* (portmanteau) → coined-from-root (Pinterest = pin + interest).
 - *Clip* (truncation of a longer word) → ranges descriptive → arbitrary depending on what's left
   recognizable (Google clipped/misspelled from "googol" is coined-from-root; "Coke" clipped from
-  "Coca-Cola" is arbitrary once detached from the plant).
+  "Coca-Cola" is arbitrary once detached from the plant; Xerox clipped from "xerography" — Greek
+  *xēros* "dry" + *-graphia* — stays coined-from-root by construction even though virtually no
+  speaker parses the root today).
 - *Respell* → fanciful if it breaks recognizability (Flickr, Lyft), coined-from-root if the root
   stays legible (Krispy).
 - *Foreign-source transplant* → arbitrary in the target market if the word is common in its source
   language but meaningless to the target audience (Volvo = Latin "I roll," arbitrary in English-
   speaking markets).
-- *Phoneme coinage* (no real morphemes at all) → fanciful (Kodak, Xerox, Häagen-Dazs — invented
-  syllables with no root).
+- *Phoneme coinage* (no real morphemes at all) → fanciful (Kodak, Exxon, Häagen-Dazs — invented
+  syllables with no root). Xerox is *not* an example of this — see the Clip row above: it clips
+  "xerography," a real Greek root (*xēros*, dry), so it is coined-from-root, not phoneme coinage,
+  even though its trademark tier reads as fanciful in practice (§"Where the axes come apart"
+  below).
 - *Domain transplant* (metaphor system, not a single word) → associative/metaphoric (Scout,
   Palantir, Slack-as-in-cut-them-some-slack is closer to arbitrary; Scout-as-scouting is
   associative).
@@ -87,7 +92,7 @@ high on one and low on the other.
 | **Apple** (computers) | Linguistically **obvious** — a common fruit word, zero cleverness in construction | **Arbitrary**, one of the strongest tiers | The construction is trivial (it's just "apple"); the legal strength comes entirely from *category mismatch* — nothing about fruit relates to computers. Simple to build, hard to challenge. |
 | **Garden** (hypothetical database tool, PRD's own worked failure) | Linguistically **rich** — a whole associative metaphor arrives instantly (seeds, soil, pruning, harvest, compost) | **Suggestive-to-descriptive**, and legally unremarkable | Breadth of vocabulary is not the same axis as legal strength *or* as fidelity. A metaphor can feel clever and generative while sitting in an ordinary legal tier and — the sharper failure — while mapping onto nothing real in the product. See `breadth × fidelity` in the example bank. |
 | **Braun-style descriptive names inside a UI** ("Balance" for a spending-limit feature) | Linguistically plain, almost boring | **Descriptive**, weak — nobody could stop a competitor from calling their feature "Balance" | Legally weak by design, and *correct* — a feature name isn't trying to be ownable, it's trying to be instantly clear. Legal weakness here is not a defect. |
-| **Xerox** | Linguistically **invented** — pure phoneme coinage, no root | **Fanciful**, the strongest tier | Here the axes align — but Xerox is also the case that shows fanciful strength has a *cost*: the company spent decades fighting to keep "xerox" from becoming the generic verb for photocopying (genericide risk lives at the top of the tier scale too, just via a different mechanism). |
+| **Xerox** | Linguistically **coined-from-root** — clipped from "xerography" (Greek *xēros*, dry, + *-graphia*), a real root essentially no speaker parses today | **Fanciful**, the strongest tier | The axes diverge in the direction opposite Apple: a construction with a genuine root still reads, to speakers and trademark examiners alike, as fanciful, because the root is functionally invisible. Xerox is also the case that shows fanciful strength has a *cost*: the company spent decades fighting to keep "xerox" from becoming the generic verb for photocopying (genericide risk lives at the top of the tier scale too, just via a different mechanism). |
 | **Scout** | Linguistically generative — associative/metaphoric, passes `breadth × fidelity` cleanly | **Suggestive**, moderate — and crowded (Scout Motors, Scout24, Scout APM, the scouting movement itself) | High generativity does not buy legal cleanliness. A name can be an excellent `world, not word` and a mediocre trademark simultaneously — this is exactly the case §3.5 of the PRD calls out: ownability is `flag, never block`, because the two axes are independent inputs to different decisions. |
 
 **The general rule:** name type predicts *how the name was made and what it can generate*.

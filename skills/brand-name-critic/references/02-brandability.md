@@ -62,11 +62,9 @@ already drawn?
 **Does the vocabulary mean the right things?** Does the metaphor's internal structure map onto the
 product's actual structure — or is it merely adjacent?
 
-**Breadth without fidelity is the dangerous failure precisely because it feels productive.** Call
-a database tool *Garden* and you get seeds, soil, pruning, harvest, compost in ten seconds. It
-feels like the naming problem just got solved. Now ask what "pruning" is. If the answer is "uh,
-deleting rows I guess," you have not built a naming system — **you have built a decoder ring users
-must memorise.**
+**Breadth without fidelity is the dangerous failure precisely because it feels productive.** See
+`${CLAUDE_PLUGIN_ROOT}/shared/example-bank.md` §7 for the worked Garden-for-a-database-tool case —
+do not restate it here.
 
 > **Arbitrary mapping is worse than a plain name, because plain names don't ask anyone to learn
 > anything.** A screen called *Settings* costs nothing. A screen called *Greenhouse* costs every
