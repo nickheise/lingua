@@ -21,10 +21,10 @@ the fidelity test gets rushed to reach it.
 
 ## Step 1 — Load the brief
 
-Three paths: a positioning canvas (auto-populate, ask nothing) · a project document — PRD, spec,
-README (extract and cite first, ask only real gaps, harvest Step 3's five concepts from it) ·
-neither (four questions, one message; one follow-up round only on answers too vague for Step 3).
-Structure the brief to seed a positioning facilitator later. → `references/01-brief.md`
+Three paths: a positioning canvas (auto-populate, ask nothing) · a project document (extract and
+cite first, ask only real gaps, harvest Step 3's five concepts from it) · neither (four
+questions, one message; one follow-up round only on answers too vague for Step 3). Structure the
+brief to seed a positioning facilitator later. → `references/01-brief.md`
 
 ## Step 2 — Propose 5-7 candidate worlds
 
@@ -64,5 +64,6 @@ Needs: nothing further — the chosen world is recorded above.
 
 ## Close out (every run)
 
-Edit `references/troubleshooting.md` — revise existing entries rather than appending
-indefinitely. **On a read-only run, skip it and say `Close-out skipped — read-only run.`**
+Edit `references/troubleshooting.md` — revise, don't append. **Attempt the write; if it
+fails, say `Close-out skipped — read-only run (write unavailable: <reason>).`** Don't assert
+read-only without trying.

@@ -6,7 +6,7 @@ allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/phonetics.py *)
 
 # Brand name critic
 
-Three layers, three shapes of verdict: a measurement, an argument, a fact sheet. **Kill the
+Three layers, three shapes of output: a measurement, an argument, a fact sheet. **Kill the
 composite** — never average into one number. Ends at a verdict (`names or a verdict`;
 `${CLAUDE_PLUGIN_ROOT}/shared/velocity.md` is binding).
 
@@ -80,5 +80,6 @@ alternatives, if the recommendation was negative.
 - Append the name, profile, and outcome to
   `${CLAUDE_PLUGIN_ROOT}/shared/naming-decisions-log.md`.
 
-**Read-only runs** (blind QA from the generator, an eval harness, no write access) skip both
-and say `Close-out skipped — read-only run.` — never fail here, never pretend to have logged.
+**Attempt both writes.** If either fails — no tool, no permission, a QA sandbox — say
+`Close-out skipped — read-only run (write unavailable: <reason>).` Don't assert read-only in
+advance, and don't pretend to have logged.

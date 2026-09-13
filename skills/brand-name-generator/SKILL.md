@@ -71,4 +71,5 @@ patch here.
 
 Edit `references/troubleshooting.md` — revise entries, don't append indefinitely. Append the
 world, the candidates, and the outcome to `${CLAUDE_PLUGIN_ROOT}/shared/naming-decisions-log.md`.
-**On a read-only run, skip both and say `Close-out skipped — read-only run.`**
+**Attempt both; if either fails, say `Close-out skipped — read-only run (write unavailable:
+<reason>).`** Don't assert read-only without trying.
