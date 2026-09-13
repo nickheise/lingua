@@ -97,8 +97,8 @@ SONORITY_CLASS = {
 #   1. /spr/ /skw/  — spring, square. Siblings of /spl/ /skr/ /str/, which the
 #      brief lists; omitting them would flag "Sprig" as illegal.
 #   2. /gw/         — Gwen, language, penguin, jaguar, iguana. Load-bearing:
-#      CMUdict gives "lingua" as L IH1 NG G W AH0, and without /gw/ the module's
-#      own namesake syllabifies as ling.wa with a bogus flag.
+#      CMUdict gives "lingua" as L IH1 NG G W AH0, and without /gw/ that real
+#      word syllabifies as ling.wa with a bogus flag.
 #   3. /Tw/         — thwart, thwack. Load-bearing for the benchmark's
 #      "Thrixthwaite".
 #   4. C + /j/      — cute K Y UW1 T, few F Y UW1, music M Y UW1 Z IH0 K.
@@ -801,7 +801,7 @@ def stress_profile(sylls: List[Syllable]) -> Dict[str, object]:
 #
 # data/lexicon.txt.gz is produced by build_lexicon.py. Format:
 #
-#   #lingua-lexicon<TAB>1
+#   #lingo-lexicon<TAB>1
 #   #entries<TAB>112034
 #   #max-phonemes<TAB>10
 #   #density-histogram<TAB>0:812 1:1904 2:2201 ...

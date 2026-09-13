@@ -1,10 +1,10 @@
 {
-  "name": "lingua",
+  "name": "lingo",
   "owner": { "name": "Nick Heise", "url": "https://github.com/nickheise" },
-  "description": "Lingua — a naming module for the brand skills suite.",
+  "description": "Lingo — a naming module for the brand skills suite.",
   "plugins": [
     {
-      "name": "lingua",
+      "name": "lingo",
       "source": "./",
       "description": "Naming as a repeatable process. Three skills that build semantic worlds, generate name candidates inside them, and critique any name across measured ergonomics, argued brandability, and factual practicality.",
       "category": "writing",

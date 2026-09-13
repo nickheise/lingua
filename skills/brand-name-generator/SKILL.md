@@ -1,6 +1,6 @@
 ---
 name: brand-name-generator
-description: Turn a chosen semantic world into a clustered shortlist of ~12 name candidates, each with type, trademark tier, rationale, three sibling names, and a usage sentence — then hand the shortlist to a blind subagent for independent critique. Run this yourself once brand-name-worlds has produced a world to build from; it will not fire on its own. Requires a chosen world — arrive without one and this points you to /lingua:brand-name-worlds instead of improvising one. Not for critiquing a name you already have (that's brand-name-critic) and not for building the semantic world itself (that's brand-name-worlds).
+description: Turn a chosen semantic world into a clustered shortlist of ~12 name candidates, each with type, trademark tier, rationale, three sibling names, and a usage sentence — then hand the shortlist to a blind subagent for independent critique. Run this yourself once brand-name-worlds has produced a world to build from; it will not fire on its own. Requires a chosen world — arrive without one and this points you to /lingo:brand-name-worlds instead of improvising one. Not for critiquing a name you already have (that's brand-name-critic) and not for building the semantic world itself (that's brand-name-worlds).
 disable-model-invocation: true
 ---
 
@@ -14,7 +14,7 @@ Open every response `Step N of M · toward a critiqued shortlist of ~12 candidat
 deliverable, not the chain's.
 
 **Requires a chosen world.** Arrive without one → say this and stop, don't improvise one:
-`Next: /lingua:brand-name-worlds` — produces 2–3 stress-tested worlds; needs your brief or
+`Next: /lingo:brand-name-worlds` — produces 2–3 stress-tested worlds; needs your brief or
 concept.
 
 > **Paths.** If `${CLAUDE_PLUGIN_ROOT}`/`${CLAUDE_SKILL_DIR}` are empty (bare checkout, subagent,

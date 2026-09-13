@@ -72,7 +72,7 @@ yes/no; the user decides. `flag, never block`: nothing here has a veto.
 
 ## Close out
 
-Terminal artifact — say so, and offer one follow-on: `/lingua:brand-name-generator` for
+Terminal artifact — say so, and offer one follow-on: `/lingo:brand-name-generator` for
 alternatives, if the recommendation was negative.
 
 - **Edit** `references/troubleshooting.md` — revise existing entries rather than appending

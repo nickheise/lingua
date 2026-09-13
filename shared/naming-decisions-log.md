@@ -95,11 +95,11 @@ more populated than it is. **It is correct for this log to be nearly empty at v1
     register, no SEO to compete for. Which is exactly why it wasn't worth spending more than five
     minutes on — the practicality layer has nothing at stake here, so it can't rescue a weak
     brandability read.
-- **Status:** **provisional, expected to be replaced.** The module name deliberately appears
-  nowhere in the skill names or skill bodies (BUILD-MAP §0, §6) — only in `plugin.json`,
-  `marketplace.json`, the README, and the invocation prefix — specifically so that renaming it
-  later is cheap. This entry is the honest prior work that should seed the plugin's first real
-  run on itself, per BUILD-MAP §6.
+- **Status:** **superseded 2026-09-13 — renamed to "Lingo" by direct user decision.** See entry
+  003. The prediction in this line held: the module name appeared nowhere in the skill names or
+  skill bodies (BUILD-MAP §0, §6) — only in `plugin.json`, `marketplace.json`, the README, and the
+  invocation prefix — so the rename touched a manifest, a README, five invocation-prefix strings,
+  and one self-identifying data-format tag. No skill's procedure or rubric changed.
 
 ### 002 — 2026-08-24 — the unnamed umbrella (OPEN)
 
@@ -120,3 +120,42 @@ more populated than it is. **It is correct for this log to be nearly empty at v1
   category generically ("Brand Suite," "Toolkit").
 - **Status:** open. Not resolvable from research — this is exactly the kind of decision only the
   user makes, and fabricating a resolution here would violate the log's own purpose.
+
+### 003 — 2026-09-13 — "Lingua" → "Lingo" (module rename)
+
+- **Context profile:** venture (module/product-level naming)
+- **Proposed:** Lingo
+- **Chosen:** Lingo — by direct user instruction: *"it's clearer and easier to pronounce."*
+- **Rejected:** Lingua (the prior name; see entry 001, which called its own replacement)
+- **Method — recorded honestly, not smoothed over:** this did **not** go through
+  `brand-name-worlds` → `brand-name-generator` → `brand-name-critic`, the pipeline BUILD-MAP §6
+  designates as "the first real job for the finished tool." It was a direct decision. What ran
+  instead was a partial, manual check — `phonetics.py` for the ergonomics layer, plus a
+  from-memory practicality scan — because `flag, never block` applies to this plugin's own naming
+  exactly as it applies to everyone else's, even when the decision itself isn't in question.
+- **Ergonomics (measured, `phonetics.py`):** score **86** (pronounceability 100, spellability 76,
+  distinctiveness 58, rhythm & recall 100, verbability 80, international 100). Two syllables,
+  trochee, clean phonotactics, no illegal clusters. Close behind Lingua's 93 — the cost is
+  spellability (four plausible one-hearing misspellings: lingoa, lingoe, lingow, lyngo) and
+  distinctiveness (neighbourhood density 10, 70th percentile — bingo, dingo, lango, longo are
+  real one-edit neighbours).
+- **Practicality (from memory, not a search — flagged as exactly that):**
+  - Almost certainly a **descriptive** trademark tier, not suggestive: "lingo" is the ordinary
+    English word for the specialized vocabulary of a group, which is a very close, literal
+    description of what a naming tool's output *is*. Aptness and weak protectability are the same
+    fact here.
+  - Real namespace crowding, and more concentrated than Lingua's: **Duolingo** — one of the most
+    recognized consumer brands in the world — is literally *Duo* + *Lingo*. **"Lingo"** was also
+    the name of Macromedia Director's scripting language, a real prior use in software.
+  - None of this is disqualifying for a personal toolkit with no trademark exposure and no domain
+    to register — the same reasoning that made practicality irrelevant for Lingua applies here —
+    but it is exactly the kind of finding this plugin exists to surface rather than skip, so it is
+    on record rather than quietly absent.
+- **What was NOT done:** no world-building, no fidelity test, no diverge/cluster/converge pass, no
+  sibling-name check, no full three-layer argued critique with a counter-argument on each
+  brandability criterion. If the module is ever renamed again, or if this decision is revisited,
+  the honest starting point is that "Lingo" has had an ergonomics check and a practicality flag —
+  not the full process this plugin recommends to everyone else.
+- **Status:** adopted. Superseding note added to entry 001. The umbrella-naming gap in entry 002
+  is unaffected — "Lingo" is no wider semantically than "Lingua" was, and remains too narrow to
+  cover positioning + naming + content + pitch as a family.

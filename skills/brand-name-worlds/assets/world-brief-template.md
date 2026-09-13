@@ -121,7 +121,7 @@ break. Keeps the rejection on the record instead of silent.>
 ## Next
 
 ```
-Next: /lingua:brand-name-generator
+Next: /lingo:brand-name-generator
 Produces ~12 candidates inside your chosen world, each with three sibling names and a usage
 sentence, independently critiqued.
 Needs: the chosen world from the brief above.

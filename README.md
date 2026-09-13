@@ -1,4 +1,4 @@
-# Lingua
+# Lingo
 
 **Naming as a repeatable process.** A Claude Code plugin of three skills that either critique a
 name you have already fallen for, or generate candidates from a description — grounded in
@@ -104,14 +104,14 @@ Feature naming and product naming are opposite problems. Same rubric, three weig
 
 ```
 /plugin marketplace add nickheise/lingua
-/plugin install lingua@lingua
+/plugin install lingo@lingo
 ```
 
 Then:
 
 ```
-/lingua:brand-name-worlds        # start from a description
-/lingua:brand-name-generator     # once you have a world
+/lingo:brand-name-worlds        # start from a description
+/lingo:brand-name-generator     # once you have a world
 ```
 
 `brand-name-critic` needs no invocation — mention a candidate name and it fires.
@@ -129,21 +129,36 @@ is no install step, no network call, and no API key.
 
 ## Where the name came from, and where it is going
 
-`Lingua` is the **module name, not a skill name.** Skill names are feature names — the model
-matches on them, so they are boring on purpose. `brand-name-critic` is what the model needs to
-see; *Lingua* is what the folder is called.
+The **module name, not a skill name.** Skill names are feature names — the model matches on
+them, so they are boring on purpose. `brand-name-critic` is what the model needs to see; the
+module name is what the folder is called. That split is what makes this rename cheap: it touches
+a manifest, a README, and an invocation prefix, never a skill body.
 
-Run through its own rubric, honestly: ergonomically strong (two syllables, DA-da, clean CVC-CV,
-unambiguous spelling), brandability weak — descriptive-suggestive Latin for "tongue", the first
-word anyone reaches for in this space, sitting in a dense namespace with Linguee, Lingua Franca,
-and Lingua.ly. Low generativity: tongue, Babel, Rosetta, grammar, none of which maps onto
-anything you would build. Practicality: irrelevant, it is a personal toolkit.
+The module was originally called **Lingua**, and it did not survive contact with its own rubric.
+Run honestly: ergonomically strong (two syllables, DA-da, clean CVC-CV, unambiguous spelling),
+brandability weak — descriptive-suggestive Latin for "tongue", the first word anyone reaches for
+in this exact space, sitting in a dense namespace with Linguee, Lingua Franca, and Lingua.ly. Low
+generativity: tongue, Babel, Rosetta, grammar, none of which maps onto anything you would build.
+That critique is entry 001 of [`shared/naming-decisions-log.md`](shared/naming-decisions-log.md),
+and it called its own replacement from the start: *"provisional, expected to be replaced."*
 
-So the first real job for the finished plugin is to name itself, and to name the umbrella above
-it — positioning + naming + content + pitch collectively still have no name, and "Lingua" is too
-narrow semantically to be it. That prior work is seeded in
-[`shared/naming-decisions-log.md`](shared/naming-decisions-log.md) so the run starts warm.
-Renaming is expected; nothing in the build makes it painful.
+It has since been renamed to **Lingo** — by direct decision, not by running the plugin's own
+`brand-name-worlds` → `brand-name-generator` pipeline on itself. Ergonomically it holds up:
+`phonetics.py` returns 86 (two syllables, trochee, clean phonotactics, no illegal clusters), close
+behind Lingua's 93. The honest flags, in the `flag, never block` spirit this plugin argues for
+everywhere else: it is a common English word for jargon or specialized vocabulary — apt for a
+naming tool, but that aptness is also why it is almost certainly a **descriptive** trademark tier
+rather than suggestive, and it sits closer to real crowding than Lingua did — Duolingo is one of
+the most recognized consumer brands in the world and is literally *Duo* + *Lingo*, and "Lingo"
+was also the name of Macromedia Director's scripting language, a real prior use in software. None
+of that is disqualifying for a personal toolkit with no trademark exposure and no domain to
+register — practicality is irrelevant here by the same reasoning that made it irrelevant for
+Lingua — but it is exactly the kind of finding this plugin exists to surface rather than skip.
+
+The umbrella above this module — positioning + naming + content + pitch collectively — still has
+no name, and neither "Lingua" nor "Lingo" is semantically wide enough to be it. That remains the
+fitting first real job for the finished suite; see
+[`shared/naming-decisions-log.md`](shared/naming-decisions-log.md) for the full record.
 
 ## Roadmap beyond v1
 

@@ -69,7 +69,7 @@ written above it, which structurally leaves no room for a fresh word) or in a di
 (diagnose from there). Log the actual leak location here before editing.
 
 **New leak surface as of the velocity change: the handoff block.** Step 4 now ends by naming
-`/lingua:brand-name-generator`. Naming the next *command* is not naming the product, but it puts
+`/lingo:brand-name-generator`. Naming the next *command* is not naming the product, but it puts
 the word "generator" in the agent's mouth at exactly the moment the guard is holding back a
 candidate, and the obvious slip is a bridging sentence — "the cartography world would generate
 something like…", or a `Needs:` line that names a survivor *and* a word it suggests. Watch for a

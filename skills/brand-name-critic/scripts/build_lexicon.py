@@ -133,7 +133,7 @@ def write_lexicon(entries: Sequence[Tuple[str, Tuple[str, ...]]],
     os.makedirs(os.path.dirname(path), exist_ok=True)
     hist_str = " ".join("{0}:{1}".format(d, hist[d]) for d in sorted(hist))
     lines = [
-        "#lingua-lexicon\t{0}".format(FORMAT_VERSION),
+        "#lingo-lexicon\t{0}".format(FORMAT_VERSION),
         "#entries\t{0}".format(len(entries)),
         "#max-phonemes\t{0}".format(MAX_PHONEMES),
         "#density-sample\t{0}".format(sum(hist.values())),

@@ -128,7 +128,7 @@ the rubric itself:
 
 ## Standing caveat
 
-**This is a heuristic tier assignment, not clearance.** Lingua flags trademark risk — construction
+**This is a heuristic tier assignment, not clearance.** Lingo flags trademark risk — construction
 type and rough distinctiveness tier — as a starting orientation. It never clears a name. It does
 not search live trademark registers, does not check use-in-commerce, does not evaluate a specific
 class of goods, and cannot see confusingly-similar marks outside its own reference material. Real

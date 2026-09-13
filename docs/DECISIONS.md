@@ -403,3 +403,68 @@ Fixed by mapping against the literal section headings, and the correction paid f
 **Standing rule.** When the canvas schema changes, this mapping changes with it. It is the only
 coupling point, which is what makes it cheap to maintain — and the reason to keep it to one table
 in one file rather than letting canvas assumptions spread through the skills.
+
+---
+
+## ADR-016 — Rename the module from Lingua to Lingo, by direct decision, without retrofitting the pipeline
+
+**Date:** 2026-09-13 · **Status:** accepted · **Phase:** 3
+
+**Context.** The user instructed a direct rename: *"can we rename all instances of Lingua to
+Lingo. it's clearer and easier to pronounce."* Entry 001 of `shared/naming-decisions-log.md`
+already called this outcome — Lingua's status field read "provisional, expected to be replaced"
+from the first commit. BUILD-MAP §6 designated the mechanism for that replacement as running
+`brand-name-worlds` → `brand-name-generator` → `brand-name-critic` on the module itself.
+
+**Decision.** Execute the rename as instructed, immediately, without insisting the full pipeline
+run first. Apply a partial manual check instead — `phonetics.py` for real ergonomics numbers, plus
+a from-memory practicality scan — and record it honestly as partial.
+
+**Why not require the pipeline.** `flag, never block` is the standing rule for every candidate
+this plugin evaluates, including, now, its own name. The user made a clear decision and gave a
+reason. Substituting "run the four-question brief, then the world stress-test, then diverge and
+converge" for a decision already made would be exactly the friction §3.5 and the venture profile's
+`tolerate opacity` rule argue against manufacturing. The honest position is to do the rename, do
+the cheap partial check that catches anything load-bearing, and say plainly what was skipped —
+not to block a direct instruction on process the user didn't ask for.
+
+**What the manual check found, and why it didn't change the decision.** Ergonomics: 86, comfortably
+strong, close behind Lingua's 93. Practicality: almost certainly a descriptive trademark tier
+(the word literally means "specialized vocabulary of a group," which is what the tool produces),
+and a real, more concentrated collision than Lingua had — Duolingo, and Macromedia Director's
+scripting language. Both are `shared/naming-decisions-log.md` entry 003's content in full. Neither
+rises to a blocker: this is a personal toolkit with no trademark exposure and no domain to
+register, the same condition that made practicality irrelevant for Lingua. `flag, never block`
+means exactly this — the finding is on record, and it does not reverse a decision the user already
+made for a stated reason.
+
+**What this did NOT do**, recorded so it is never mistaken for a completed self-critique: no world
+was built, no fidelity test ran, no sibling-name gate was applied, no argued brandability
+counter-argument was written. Entry 003 says this explicitly. If "Lingo" is ever revisited, the
+honest starting point is a partial check, not a full one.
+
+**Scope of the rename — the promise being tested.** BUILD-MAP §0/§6 and README's "Where the name
+came from" section both state the module name appears only in `plugin.json`, `marketplace.json`,
+the README, and the invocation prefix — never in a skill name or a skill body. This rename is the
+first real test of that claim, and it held: the full change touched two manifest files, the
+README, five hardcoded `/lingua:` invocation-prefix strings (a functional detail easy to miss —
+the prefix is derived from `plugin.json`'s `name` field, so it had to change everywhere it was
+hardcoded rather than substituted), and one self-identifying data-format tag in the vendored
+lexicon (`#lingua-lexicon` → `#lingo-lexicon`, requiring a lexicon rebuild). No skill's SKILL.md
+procedure, reference file, or rubric changed in substance.
+
+**What deliberately did NOT change**, because it names a fixed word rather than the plugin's
+current identity:
+- `docs/PRD.md` — checked in verbatim per ADR-008's precedent; never edited after the fact.
+- Every worked linguistic example using "lingua" as a real word: the CMUdict /gw/-onset case in
+  `phonetics.py`, the PRD's own §7.2 self-critique quoted in `02-brandability.md` and
+  `critique-template.md`, the clipping example in `scripts/README.md`, and the PRD §8-mandated
+  20-name benchmark set in `tests/benchmark.txt` and `test_phonetics.py`. These test or cite a
+  specific Latin/English word; they are not naming the tool.
+- Existing dated entries in this file and in `CHANGELOG.md` — historical records of what was true
+  when they were written are not rewritten. This ADR and a new CHANGELOG entry record the change
+  going forward instead.
+- The GitHub repository name (`nickheise/lingua`) and the git branch name. Both are visible in the
+  install command and the compare-links in `CHANGELOG.md`. Renaming either is a separate,
+  more consequential action — repo rename affects external links and clone URLs — and wasn't
+  part of the instruction, so it wasn't done unilaterally.

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Lingua are documented here.
+All notable changes to Lingo are documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Each minor version
@@ -9,9 +9,33 @@ criteria that must be met before the next begins.
 
 ## [Unreleased]
 
+### Changed
+- **Renamed the module from Lingua to Lingo**, by direct user decision — see
+  `shared/naming-decisions-log.md` entry 003 and ADR-016. Touched `plugin.json`,
+  `marketplace.json`, the README, five hardcoded `/lingua:` invocation-prefix strings, and the
+  vendored lexicon's self-identifying format tag (`#lingua-lexicon` → `#lingo-lexicon`, rebuilt
+  byte-stable). No skill's procedure or rubric changed. `phonetics.py` gives Lingo an ergonomics
+  score of 86; a partial practicality flag (Duolingo, and Macromedia Director's scripting
+  language) is on record but the full worlds → generator → critic pipeline was not run against
+  the module's own name — recorded honestly as a gap in ADR-016, not smoothed over.
+- **Added `shared/velocity.md`**, a binding outcome contract retrofitted onto all three skills:
+  every run terminates at `names or a verdict`, never a document about naming; a step ledger
+  states each skill's own deliverable, never the chain's; `earn the question` replaces the
+  original four-question hard cap; every terminating step names the exact next command.
+- **`brand-name-worlds` gained document intake ("Path C")** — an attached PRD, spec, or README is
+  extracted first, and only genuine gaps get asked about, rather than re-asking the four-question
+  brief over material that already answers it. Also gained an explicit handoff naming
+  `brand-name-generator` as the next command, closing a dead end where the skill guarded its
+  no-names stop but never said what to run afterward.
+- **`brand-name-critic` gained comparison mode** (`references/04-comparison.md`) for two or more
+  candidates head-to-head: one ergonomics table, differences-only argument, a recommendation
+  locked to three named slots (pick / strongest case for the other / what would flip it) with no
+  slot a ranking or a score could occupy.
+
 ### Planned
 - **Phase 3 → `1.0.0`** — factor, audit, and prune: single source of truth for every reference,
   the deletion test on every paragraph, and a leading-word trace audit across all three skills.
+  An adversarial review pass is in progress; findings will land here once triaged.
 
 ## [0.3.0] — 2026-08-24
 

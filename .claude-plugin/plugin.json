@@ -1,6 +1,6 @@
 {
-  "name": "lingua",
-  "displayName": "Lingua",
+  "name": "lingo",
+  "displayName": "Lingo",
   "version": "0.3.0",
   "description": "Naming as a repeatable process. Three skills that build semantic worlds, generate name candidates inside them, and critique any name across measured ergonomics, argued brandability, and factual practicality.",
   "author": { "name": "Nick Heise" },

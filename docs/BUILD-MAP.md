@@ -1,4 +1,4 @@
-# Lingua — Build Map
+# Lingo — Build Map
 
 **The plan of record.** Every file this plugin will contain, who builds it, what it must
 satisfy, and how we know it is done. Read this before starting work; update it when the
@@ -11,7 +11,7 @@ Rationale for anything that deviates from the PRD: [`docs/DECISIONS.md`](DECISIO
 
 ## 0. What we are building
 
-A Claude Code **plugin** named `lingua` that ships three Agent Skills for naming work:
+A Claude Code **plugin** named `lingo` that ships three Agent Skills for naming work:
 
 | Skill | Invocation | Job | Terminates at |
 |---|---|---|---|
@@ -22,8 +22,8 @@ A Claude Code **plugin** named `lingua` that ships three Agent Skills for naming
 The governing rule for invocation (§5.1): **critics are model-invoked, makers are user-invoked.**
 Makers carry `disable-model-invocation: true` so they cost zero standing context.
 
-`Lingua` is the **module name, not a skill name** (§7.2). Skill names are boring on purpose
-because the model matches on them.
+The **module name, not a skill name** (§7.2) — currently `Lingo`, renamed from the original
+`Lingua` (§6). Skill names are boring on purpose because the model matches on them.
 
 ---
 
@@ -53,7 +53,7 @@ steering failed and the words get stronger or more consistent — the skill is n
 Status legend: `▣` not started · `◐` in progress · `▣` built · `✅` reviewed & accepted
 
 ```
-lingua/
+lingo/
 ├── .claude-plugin/
 │   ├── plugin.json                        ▣  P0  manifest
 │   └── marketplace.json                   ▣  P0  single-plugin marketplace, installable from the repo
@@ -299,20 +299,32 @@ Named here so they do not creep in.
 
 ## 6. First job for the finished tool
 
-§7.2 leaves two open naming questions, and they are the honest first test of the thing:
+§7.2 leaves two open naming questions, and they were meant to be the honest first test of the
+thing:
 
-1. **The umbrella has no name.** Positioning + naming + content + pitch, collectively — "Lingua"
-   is too narrow semantically to cover it.
-2. **"Lingua" itself is a weak name** by its own rubric: ergonomically strong, brandability weak
-   (descriptive-suggestive Latin for "tongue", dense namespace, low generativity — tongue, Babel,
-   Rosetta, grammar, none of which maps onto anything you would build).
+1. **The umbrella has no name.** Positioning + naming + content + pitch, collectively — the
+   module's own name is too narrow semantically to cover it.
+2. **The module's original name was weak** by its own rubric: ergonomically strong, brandability
+   weak (descriptive-suggestive Latin for "tongue", dense namespace, low generativity — tongue,
+   Babel, Rosetta, grammar, none of which maps onto anything you would build).
 
-So the plugin's first real run is on itself: `/lingua:brand-name-worlds` on the module, then the
-generator, then the critic. Whatever replaces it should pass the six-siblings test. The honest
-read of "Lingua" from §7.2 is seeded into `shared/naming-decisions-log.md` as entry 001
-so that run starts with the prior work already in hand.
+**Question 2 is resolved, but not by the mechanism this section originally called for.** The
+module was renamed from `Lingua` to `Lingo` by direct user decision — not by running
+`brand-name-worlds` → `brand-name-generator` → `brand-name-critic` on itself. That is a real gap
+against the plan as written here, recorded honestly rather than smoothed over: the new name has
+not been through the fidelity test, the diverge/cluster/converge pass, or a full three-layer
+critique — only a quick ergonomics run and a manual practicality flag (Duolingo's proximity, and
+"Lingo" as Macromedia Director's scripting language). See `shared/naming-decisions-log.md` entry
+003 for the full record, and ADR-016 in `DECISIONS.md` for why the build treats a direct user
+decision as final without insisting the pipeline run retroactively — `flag, never block` applies
+to the plugin's own naming exactly as it applies to everyone else's.
 
-Renaming the plugin afterwards is expected. Nothing in the build should make it painful: the
-module name appears in `plugin.json`, `marketplace.json`, the README, and the invocation prefix —
-and **nowhere in the skill names or the skill bodies**, which is exactly why §7.2 insists Lingua
-is the module name and not a skill name.
+**Question 1 is still open.** The umbrella covering positioning + naming + content + pitch has no
+name yet, and neither `Lingua` nor `Lingo` is semantically wide enough to be it. Whatever is
+proposed should pass the `six-siblings test` — see `shared/naming-decisions-log.md` entry 002.
+
+Renaming the plugin was designed to be cheap, and this rename is the proof: the module name
+appeared only in `plugin.json`, `marketplace.json`, the README, and the invocation prefix — and
+**nowhere in the skill names or the skill bodies** — so the entire change touched a manifest, a
+README, five invocation-prefix strings, and one self-identifying data-format tag. No skill's
+procedure, rubric, or reference material needed to change at all.
